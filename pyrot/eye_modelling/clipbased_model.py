@@ -12,10 +12,37 @@ from pyrot.config import Config
 logger = logging.getLogger(__name__)
 
 
-def match_ellipse_with_pois(
-    eye_model_generators, eye_model_parameters, structure_set, input_ellipse, poi_type_clips, poi_type_on
-):
-    # matches the translation and rotation of the eye model such that it corresponds to the known clip locations (on the outside of the sclera) and optic disk location
+def match_ellipse_with_pois(eye_model_generators, eye_model_parameters, structure_set, input_ellipse, poi_type_clips, poi_type_on):
+"""
+Aligns the eye model's translation and rotation to best fit known clip locations (POIs) and the optic disk location.
+This function updates the eye model center and rotation so that the model's sclera surface matches the positions of physical markers (clips) and the optic disk.
+
+Parameters
+----------
+eye_model_generators : object
+    An object responsible for generating or updating the eye model.
+eye_model_parameters : object
+    An object containing the current parameters of the eye model, such as translation and sclera radii.
+structure_set : object
+    The structure set containing the POIs (points of interest) for the patient.
+input_ellipse : str
+    The type of ellipse to fit to the POIs. Currently, only "sclera_radii" is supported.
+poi_type_clips : str
+    The POI type corresponding to the physical markers (clips) on the sclera.
+poi_type_on : str
+    The POI type corresponding to the optic disk (OD) location.
+Raises
+------
+ValueError
+    If there are multiple or no POIs of the specified optic disk type.
+NotImplementedError
+    If the specified input_ellipse type is not supported.
+Notes
+-----
+- The function assumes that the POIs for the clips are located at the center of the clips, and adjusts the sclera radii accordingly.
+- The function updates the eye model parameters in-place using the provided eye_model_generators object.
+"""
+  
 
     logger.debug("Starting match_ellipse_with_pois function")
 
@@ -69,12 +96,44 @@ def match_ellipse_with_pois(
 
 
 def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_model_loc_method):
-    # calculates the on_model_loc, so the location of the ON roi on the unity circle.
-    # for the fit, we need the location of the optic disk if the eye model was situated on [0,0,0] with input angles [0,0,0] and sclera radii of [1,1,1].
-    # we need this exact optic disk location because we also standardize the axes and poi locations in the sclera location fit method to the unity circle
-    # (see registration_residuals())
-    # currently, the only implemented method is based on the assumption that the optic disk location within the eye model has not been manually changed.
+    """
+    Calculates the location of the optic nerve ROI on the unity circle for a given eye model.
 
+    This function determines the standardized location of the optic disk as if the eye model were positioned at the origin
+    ([0, 0, 0]) with input angles [0, 0, 0] and sclera radii [1, 1, 1]. This is necessary for fitting procedures that
+    standardize axes and points of interest (POI) locations to the unity circle.
+
+    Currently, only the "unity_circle_standard_model" method is implemented, which assumes the optic disk location within
+    the eye model has not been manually changed.
+
+    Parameters
+    ----------
+    geometry_generators : object
+        An object containing geometry generation parameters, including eye laterality.
+    eye_model_parameters : object
+        An object containing parameters of the eye model, including optic nerve rotation.
+    on_model_loc_method : str
+        The method used to calculate the ON model location. Currently, only "unity_circle_standard_model" is supported.
+
+    Returns
+    -------
+    on_model_loc_patient : np.ndarray
+        The standardized location of the optic nerve in the eye model, mapped to the unity circle.
+
+    Raises
+    ------
+    AssertionError
+        If the optic nerve (and thus disk) has been rotated manually within the eye model, violating fit assumptions.
+    NotImplementedError
+        If the specified `on_model_loc_method` is not implemented.
+
+    Notes
+    -----
+    - The function assumes the optic disk location has not been manually changed within the eye model.
+    - The method should be validated with different types of eye models.
+    - Unit testing for this methodology should be added.
+    """
+  
     # TODO: validate this method further with multiple different types of eye models
     # TODO: add testing method for this methodology
 
@@ -117,7 +176,41 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
 
 
 def registration_residuals(params, clip_data, optic_nerve_data, axes):
-    # retuns residuals (distances to the ellipsoid & normalised distance between model and POI of Optic Disc/Nerve (ON))
+    """
+    Compute the residuals for ellipsoid registration and optic nerve location alignment.
+
+    This function calculates the residuals between a set of 3D points (clip_data) and an ellipsoid model,
+    as well as the normalized distance between the transformed optic nerve location and its model POI.
+    The transformation includes translation and rotation (with the y-axis rotation fixed to zero).
+
+    Parameters
+    ----------
+    params : array-like, shape (6,)
+        Model parameters. The first three elements are the center coordinates (x0, y0, z0),
+        and the next three are Euler angles (degrees) for rotation. The y-axis angle is fixed to zero.
+    clip_data : ndarray, shape (N, 3)
+        Array of 3D points representing the data to be registered to the ellipsoid.
+    optic_nerve_data : tuple of ndarray
+        Tuple containing:
+            - on_model_loc: ndarray, shape (3,)
+                The model location of the optic nerve (should be on the unit ellipsoid).
+            - on_image_loc: ndarray, shape (3,)
+                The observed location of the optic nerve in the image.
+    axes : array-like, shape (3,)
+        The semi-axes lengths (a, b, c) of the ellipsoid.
+
+    Returns
+    -------
+    residuals : ndarray, shape (N+1,)
+        Array containing:
+            - The residuals for each point in `clip_data` (distance from the ellipsoid surface).
+            - The normalized squared distance between the transformed optic nerve location and its model POI.
+
+    Notes
+    -----
+    The function applies translation and rotation to the input data, computes the ellipsoid equation residuals,
+    and normalizes the optic nerve location to compare with the model location.
+    """
 
     logger.debug("Starting registration_residuals function")
 
@@ -164,6 +257,41 @@ def registration_residuals(params, clip_data, optic_nerve_data, axes):
 
 
 def calc_ellipsoid_registration(clip_data, on_model_loc, on_image_loc, axes, initial_guess=None):
+    """
+    Perform ellipsoid registration to align clip data and optic nerve locations.
+
+    This function calculates the optimal translation and rotation parameters to align 
+    a set of 3D points (clip_data) with an ellipsoid defined by the given axes, while 
+    also aligning the optic nerve location in the model with its observed location.
+
+    Parameters
+    ----------
+    clip_data : ndarray, shape (N, 3)
+        Array of 3D points representing the clip data to be registered to the ellipsoid.
+    on_model_loc : ndarray, shape (3,)
+        The model location of the optic nerve (on the unit ellipsoid).
+    on_image_loc : ndarray, shape (3,)
+        The observed location of the optic nerve in the image.
+    axes : array-like, shape (3,)
+        The semi-axes lengths (a, b, c) of the ellipsoid.
+    initial_guess : array-like, shape (6,), optional
+        Initial guess for the optimization. The first three elements are the center 
+        coordinates (x, y, z), and the next three are Euler angles (degrees) for rotation. 
+        If None, the center is initialized to the mean of clip_data, and angles are set to zero.
+
+    Returns
+    -------
+    fitted_center : ndarray, shape (3,)
+        The optimized center coordinates of the ellipsoid.
+    fitted_angles : ndarray, shape (3,)
+        The optimized Euler angles (degrees) for rotation.
+
+    Notes
+    -----
+    The optimization minimizes the residuals between the clip data and the ellipsoid surface, 
+    as well as the alignment error for the optic nerve location.
+    """
+    
     logger.debug("Starting calc_ellipsoid_registration function")
 
     if initial_guess is None:
