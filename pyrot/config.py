@@ -9,10 +9,13 @@ if TYPE_CHECKING:
 
 
 class Config:
-    """Configuration for pyROT."""
+    """Configuration for pyROT.
+    Settings can be overwritten by `scripts\customization.py`, which is imported by `__common__.py`.
+    """
 
     ELLIPSOID_FIT_MINIMUM_MATRIX_CONDITION: float = 100
     """Minimum value of the matrix inversion condition for ellipsoid fitting.
+    
     The condition number is a measure of how sensitive the solution of a system of linear equations is to changes in the input data.
     If the condition number is larger than this value, the fit is considered unstable and the user is requested to add an additional input marker.
     """
@@ -39,7 +42,9 @@ class Config:
     """The unit in which rois are exported."""
 
     ROI_EXPORT_ROI_SUFFIX: str = None
-    """The suffix after the roi name of the rois that need to be exported. By default, there is no suffix in RayOcular.
+    """The suffix after the roi name of the rois that need to be exported. 
+    
+    By default, there is no suffix in RayOcular.
     In patients where multiple eye models are made OR when the roi names have been manually altered, a suffix may be present.
     None if no suffix after ROI name, ' (0)' if this is the suffix after the ROI name in RayOcular, and so on.
     """
@@ -55,11 +60,15 @@ class Config:
     """Maximum difference between model and measured iris outer radius."""
 
     ROI_NAME_OD: str = "OpticalDisc"
-    """The name of the optical disc roi. Needs to be altered only if multiple eye models are present OR the roi name has been manually altered in RayOcular
+    """The name of the optical disc roi. 
+    
+    Needs to be altered only if multiple eye models are present OR the roi name has been manually altered in RayOcular
     This is used for the eye rotation script.
     """
 
     ROI_NAME_VITREOUS: str = "VitreousBody"
-    """The name of the vitreous body roi. Needs to be altered only if multiple eye models are present OR the roi name has been manually altered in RayOcular
+    """The name of the vitreous body roi. 
+    
+    Needs to be altered only if multiple eye models are present OR the roi name has been manually altered in RayOcular
     This is used for the eye rotation script .
     """
