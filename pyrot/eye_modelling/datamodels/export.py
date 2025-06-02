@@ -24,6 +24,34 @@ def full_export(
     export_suffix: str,
     roi_export_unit: Literal["Millimeters", "Centimeters"],
 ):
+    """
+    Exports all relevant data for a given eye model to a structured output directory.
+    This function gathers patient, case, and examination information, creates a uniquely named
+    export directory, and exports ROI geometries, eye model data, and points of interest (POIs)
+    for the specified eye model number.
+
+    Parameters
+    ----------
+    output_directory : Path or str
+        The base directory where the export folder will be created.
+    eyemodelnr : int
+        The identifier number of the eye model to export.
+    export_suffix : str
+        Suffix to append to exported files for identification.
+    roi_export_unit : Literal["Millimeters", "Centimeters"]
+        The unit to use when exporting ROI geometries.
+
+    Returns
+    -------
+    None
+
+    Notes
+    -----
+    - The export directory is named using the current date and time, patient name, case name,
+      examination name, and eye model number.
+    - The function assumes that the current patient, case, and examination are set and accessible.
+    """
+
     patient = get_current("Patient")
     case = get_current("Case")
     examination = get_current("Examination")
@@ -67,6 +95,37 @@ def export_roi_geometries(
     export_suffix: str,
     roi_export_unit: str,
 ):
+    """
+    Exports ROI geometries from a given structure set to STL files.
+    The function iterates over the ROI geometries in the provided structure set, filters them based on the specified export suffix,
+    and exports each selected geometry as an STL file to the specified output directory. Exported files are named according to the ROI name,
+    with spaces replaced by underscores, and include the export unit in the filename.
+
+    Parameters
+    ----------
+    structure_set : object
+        The structure set containing ROI geometries. Must have a `RoiGeometries` attribute that supports key access.
+    output_directory : Path
+        The directory where the exported STL files will be saved.
+    examination_name : str
+        The name of the examination (not directly used in the function, but may be required for context).
+    export_suffix : str
+        If specified, only ROIs with names ending with this suffix will be exported. If empty, ROIs with automatically generated suffixes are excluded.
+    roi_export_unit : str
+        The unit to use when exporting the ROI geometry (e.g., "mm").
+
+    Warns
+    -----
+    UserWarning
+        If no STL files are found for a given ROI, or if multiple STL files are found (only the first is used).
+
+    Notes
+    -----
+    - Exported STL files are named as `{ROI_name}_unit_{roi_export_unit}.stl`, with spaces in ROI names replaced by underscores.
+    - Temporary directories are used during export to avoid filename conflicts.
+    - The function assumes that each geometry object has an `ExportRoiGeometryAsSTL` method.
+    """
+
     geometries = structure_set.RoiGeometries
     geometry_names = geometries.keys()
 
@@ -109,6 +168,29 @@ def export_roi_geometries(
 
 
 def export_eye_model(structure_set, output_directory: Path, eyemodelnr: int):
+    """
+    Export an eye model to a JSON file.
+
+    Parameters
+    ----------
+    structure_set : object
+        The structure set containing geometry generators for the eye models.
+    output_directory : Path
+        The directory where the exported JSON file will be saved.
+    eyemodelnr : int
+        The index of the eye model to export from the structure set.
+
+    Returns
+    -------
+    None
+        This function does not return anything. It writes the eye model data to a JSON file.
+
+    Notes
+    -----
+    The exported file will be named as "eye_model_{eyemodelnr}.json" and will contain
+    the serialized data of the selected eye model.
+    """
+
     eye_model = EyeModel.from_rayocular(structure_set.GeometryGenerators[eyemodelnr])
 
     with open(output_directory / f"eye_model_{eyemodelnr}.json", "w", encoding="utf-8") as f:
@@ -116,6 +198,29 @@ def export_eye_model(structure_set, output_directory: Path, eyemodelnr: int):
 
 
 def export_pois(structure_set, output_directory: Path, examination_name: str):
+    """
+    Exports points of interest (POIs) from a structure set to a JSON file.
+
+    Parameters
+    ----------
+    structure_set : object
+        The structure set containing POI geometries. Must have a `PoiGeometries` attribute.
+    output_directory : Path
+        The directory where the output JSON file ("pois.json") will be saved.
+    examination_name : str
+        The name of the examination to associate with each POI.
+
+    Returns
+    -------
+    None
+        This function does not return anything. It writes the POIs to a JSON file.
+
+    Notes
+    -----
+    The output JSON file will contain a dictionary where each key is the POI name and the value is a dictionary
+    with the POI's location, type, and associated examination name.
+    """
+
     poi_gmtrs = list(structure_set.PoiGeometries)
     pois_export = {}
     for poi in poi_gmtrs:
