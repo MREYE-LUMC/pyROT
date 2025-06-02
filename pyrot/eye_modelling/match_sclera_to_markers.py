@@ -32,7 +32,7 @@ def match_sclera_to_markers(
         The structure set containing the POI geometries.
     eye_model_generators : object
         The eye model containing eye parameters.
-    eye_model_parameters: object
+    eye_model_parameters : object
         An object with only specific eye model parameters
     eye_shape : str
         The shape of the eye model. Options are "sphere", "EYEPLAN", "ellipsoid", "ellipsoid_fixedCenter".
@@ -132,7 +132,7 @@ def calc_sclera_center_to_match_white_to_white(
     """
     Calculate the ellipsoid center location so it matches the WTW-width at vitreous depth.
     This is to ensure the models limbus diameter matches the measured limbus diameter/ White To White,
-    without compromising on correctness of anterior chamber biometry
+    without compromising on correctness of anterior chamber biometry.
 
     Uses linear interpolation to find this center translation.
     By default calculates one sample per .1 mm to account for the nonlinearity of the limbus diameter and center translation relation.
@@ -142,15 +142,15 @@ def calc_sclera_center_to_match_white_to_white(
     ----------
     structure_set : object
         The structure set containing the POI geometries.
-    eye_model_parameters: object
+    eye_model_parameters : object
         An object containing only specific eye model parameters
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
     biometry_data : dict
         The biometry data containing measurements like 'AL', 'AD', 'AD_offset', and 'WTW'.
-    evaluations_start: float
+    evaluations_start : float
         The minimal center translation to be evaluated in cm, by default -.1
-    evaluations_stop: float
+    evaluations_stop : float
         The maximal center translation to be evaluated in cm, by default .2
     n_evaluations : int, optional
         The number of evaluations for center translations, by default 31.
@@ -233,7 +233,7 @@ def calc_sclera_ellipse_for_center(
     ----------
     structure_set : object
         The structure set containing the POI geometries.
-    eye_model_parameters: object
+    eye_model_parameters : object
         The eye model object containing only eye parameters
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
@@ -321,7 +321,7 @@ def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list
 
     Parameters
     ----------
-    eye_model_parameters: object
+    eye_model_parameters : object
         An object containing only specific eye parameters
     biometry_data : dict
         The biometry data containing measurements like 'AL', 'AD', and 'AD_offset'.
@@ -411,7 +411,6 @@ def rotate_eye_model(
     ------
     NotImplementedError
         If the method designated in the 'based_on' variable is not supported
-
     """
 
     logger.debug("start rotate_eye_model function")
@@ -547,7 +546,7 @@ def calc_angle_between_points(center, from_point, to_point):
 
     Returns
     -------
-    float: Rotation angle in degrees (positive = counter-clockwise).
+    float : Rotation angle in degrees (positive = counter-clockwise).
     """
 
     logger.debug("start calc_angle_between_points function")
@@ -590,7 +589,7 @@ def calc_rotation_to_align_points(
 
     Returns
     -------
-    float: Rotation angle in degrees.
+    float : Rotation angle in degrees.
     """
 
     logger.debug("start calc_rotation_to_align_points function")

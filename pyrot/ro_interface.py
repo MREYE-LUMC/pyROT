@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 def load_current_patient():
     """
     Loads and returns the current patient associated with the active examination.
+
     Returns
     -------
     Patient
@@ -24,6 +25,7 @@ def load_current_patient():
 def load_current_structureset():
     """
     Loads and returns the current StructureSet associated with the active examination.
+
     Returns
     -------
     StructureSet
@@ -40,12 +42,14 @@ def load_current_structureset():
 def load_eyemodel(structure_set, eyemodelnr):
     """
     Load geometry generators and eye model parameters from a structure set.
+
     Parameters
     ----------
     structure_set : object
         The structure set containing geometry generators and eye model parameters.
     eyemodelnr : int
         The index of the eye model to load from the structure set.
+
     Returns
     -------
     geometry_generators : object
@@ -63,6 +67,7 @@ def load_eyemodel(structure_set, eyemodelnr):
 def load_pois(structure_set, poi_type: Optional[str] = None, poi_name_contains: Optional[str] = None):
     """
     Load POIs (Points of Interest) from a structure set, optionally filtering by type or name substring.
+
     Parameters
     ----------
     structure_set : object
@@ -71,6 +76,7 @@ def load_pois(structure_set, poi_type: Optional[str] = None, poi_name_contains: 
         The type of POI to filter by. If provided, only POIs of this type are returned.
     poi_name_contains : str, optional
         A substring to search for in POI names. If provided, only POIs whose names contain this substring are returned.
+
     Returns
     -------
     list
@@ -90,6 +96,7 @@ def load_pois(structure_set, poi_type: Optional[str] = None, poi_name_contains: 
 def load_rois(structure_set, roi_type: Optional[str] = None, roi_name_contains: Optional[str] = None):
     """
     Load ROIs (Regions of Interest) from a structure set, optionally filtering by type or name substring.
+
     Parameters
     ----------
     structure_set : object
@@ -98,6 +105,7 @@ def load_rois(structure_set, roi_type: Optional[str] = None, roi_name_contains: 
         The type of ROI to filter by. If provided, only ROIs of this type are returned.
     roi_name_contains : str, optional
         A substring to filter ROI names. If provided, only ROIs whose names contain this substring are returned.
+
     Returns
     -------
     list

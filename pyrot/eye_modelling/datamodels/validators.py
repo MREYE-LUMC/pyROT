@@ -13,9 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class ValidationError(Exception):
-    """
-    Exception raised when a validation error occurs.
-    """
+    """Exception raised when a validation error occurs."""
 
     def __init__(self, value: Any, field_name: str) -> None:
         self.message = f"Failed to validate {value=} for field {field_name}."
@@ -124,7 +122,6 @@ def rayocular_field(validator: Callable[[Any], Value], name: str | None = None) 
     -------
     ValidatedField[Instance, Value]
         The validated field.
-
     """
     return RayOcularField(validator, name)  # type: ignore
 
