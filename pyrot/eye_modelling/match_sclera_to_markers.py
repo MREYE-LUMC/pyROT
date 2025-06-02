@@ -250,6 +250,7 @@ def calc_sclera_ellipse_for_center(
     NotImplementedError
         If an unsupported marker location is provided.
     """
+    
     # TODO: future: merge with fit_eye_model_to_markers
 
     logger.debug("start calc_sclera_ellipse_for_center function")

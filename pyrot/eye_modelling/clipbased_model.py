@@ -31,12 +31,14 @@ poi_type_clips : str
     The POI type corresponding to the physical markers (clips) on the sclera.
 poi_type_on : str
     The POI type corresponding to the optic disk (OD) location.
+
 Raises
 ------
 ValueError
     If there are multiple or no POIs of the specified optic disk type.
 NotImplementedError
     If the specified input_ellipse type is not supported.
+
 Notes
 -----
 - The function assumes that the POIs for the clips are located at the center of the clips, and adjusts the sclera radii accordingly.
@@ -260,8 +262,8 @@ def calc_ellipsoid_registration(clip_data, on_model_loc, on_image_loc, axes, ini
     """
     Perform ellipsoid registration to align clip data and optic nerve locations.
 
-    This function calculates the optimal translation and rotation parameters to align 
-    a set of 3D points (clip_data) with an ellipsoid defined by the given axes, while 
+    This function calculates the optimal translation and rotation parameters to align
+    a set of 3D points (clip_data) with an ellipsoid defined by the given axes, while
     also aligning the optic nerve location in the model with its observed location.
 
     Parameters
@@ -275,8 +277,8 @@ def calc_ellipsoid_registration(clip_data, on_model_loc, on_image_loc, axes, ini
     axes : array-like, shape (3,)
         The semi-axes lengths (a, b, c) of the ellipsoid.
     initial_guess : array-like, shape (6,), optional
-        Initial guess for the optimization. The first three elements are the center 
-        coordinates (x, y, z), and the next three are Euler angles (degrees) for rotation. 
+        Initial guess for the optimization. The first three elements are the center
+        coordinates (x, y, z), and the next three are Euler angles (degrees) for rotation.
         If None, the center is initialized to the mean of clip_data, and angles are set to zero.
 
     Returns
@@ -288,7 +290,7 @@ def calc_ellipsoid_registration(clip_data, on_model_loc, on_image_loc, axes, ini
 
     Notes
     -----
-    The optimization minimizes the residuals between the clip data and the ellipsoid surface, 
+    The optimization minimizes the residuals between the clip data and the ellipsoid surface,
     as well as the alignment error for the optic nerve location.
     """
     
