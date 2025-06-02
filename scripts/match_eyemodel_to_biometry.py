@@ -5,7 +5,6 @@ import logging
 # import sys
 from connect import *  # noqa: F403
 
-import get_biometry
 from pyrot import ro_interface
 from pyrot.config import Config
 from pyrot.eye_modelling import match_sclera_to_markers, match_with_biometry

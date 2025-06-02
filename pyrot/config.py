@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class Config:
-    """Configuration for pyROT.
+    r"""Configuration for pyROT.
     Settings can be overwritten by `scripts\customization.py`, which is imported by `__common__.py`.
     """
 
