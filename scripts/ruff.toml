@@ -1,0 +1,19 @@
+extend = "../pyproject.toml"
+
+[lint]
+extend-ignore = [
+    "LOG015",  # Allow root logger calls
+]
+
+[lint.extend-per-file-ignores]
+"__common__.py" = ["I002"]
+"{customization.py,customization.example.py}" = ["I002"]
+"local_variables.py" = ["I002"]
+
+[lint.isort]
+force-to-top = ["__common__"]
+required-imports = ["import __common__"]
+section-order = ["future", "common", "standard-library", "third-party", "first-party", "local-folder"]
+
+[lint.isort.sections]
+common = ["__common__"]
