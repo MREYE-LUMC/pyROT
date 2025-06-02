@@ -50,8 +50,7 @@ target-version = "py38"
 line-length = 120
 extend-include = ["*.ipynb"]
 exclude = [
-    "Examples/RayOcular_fromMartin",
-    "Examples/RaySearchScripts",
+    "Examples/",
 ]
 
 [tool.ruff.lint]
