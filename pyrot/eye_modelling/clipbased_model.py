@@ -12,39 +12,40 @@ from pyrot.config import Config
 logger = logging.getLogger(__name__)
 
 
-def match_ellipse_with_pois(eye_model_generators, eye_model_parameters, structure_set, input_ellipse, poi_type_clips, poi_type_on):
-"""
-Aligns the eye model's translation and rotation to best fit known clip locations (POIs) and the optic disk location.
-This function updates the eye model center and rotation so that the model's sclera surface matches the positions of physical markers (clips) and the optic disk.
+def match_ellipse_with_pois(
+    eye_model_generators, eye_model_parameters, structure_set, input_ellipse, poi_type_clips, poi_type_on
+):
+    """
+    Aligns the eye model's translation and rotation to best fit known clip locations (POIs) and the optic disk location.
+    This function updates the eye model center and rotation so that the model's sclera surface matches the positions of physical markers (clips) and the optic disk.
 
-Parameters
-----------
-eye_model_generators : object
-    An object responsible for generating or updating the eye model.
-eye_model_parameters : object
-    An object containing the current parameters of the eye model, such as translation and sclera radii.
-structure_set : object
-    The structure set containing the POIs (points of interest) for the patient.
-input_ellipse : str
-    The type of ellipse to fit to the POIs. Currently, only "sclera_radii" is supported.
-poi_type_clips : str
-    The POI type corresponding to the physical markers (clips) on the sclera.
-poi_type_on : str
-    The POI type corresponding to the optic disk (OD) location.
+    Parameters
+    ----------
+    eye_model_generators : object
+        An object responsible for generating or updating the eye model.
+    eye_model_parameters : object
+        An object containing the current parameters of the eye model, such as translation and sclera radii.
+    structure_set : object
+        The structure set containing the POIs (points of interest) for the patient.
+    input_ellipse : str
+        The type of ellipse to fit to the POIs. Currently, only "sclera_radii" is supported.
+    poi_type_clips : str
+        The POI type corresponding to the physical markers (clips) on the sclera.
+    poi_type_on : str
+        The POI type corresponding to the optic disk (OD) location.
 
-Raises
-------
-ValueError
-    If there are multiple or no POIs of the specified optic disk type.
-NotImplementedError
-    If the specified input_ellipse type is not supported.
+    Raises
+    ------
+    ValueError
+        If there are multiple or no POIs of the specified optic disk type.
+    NotImplementedError
+        If the specified input_ellipse type is not supported.
 
-Notes
------
-- The function assumes that the POIs for the clips are located at the center of the clips, and adjusts the sclera radii accordingly.
-- The function updates the eye model parameters in-place using the provided eye_model_generators object.
-"""
-  
+    Notes
+    -----
+    - The function assumes that the POIs for the clips are located at the center of the clips, and adjusts the sclera radii accordingly.
+    - The function updates the eye model parameters in-place using the provided eye_model_generators object.
+    """
 
     logger.debug("Starting match_ellipse_with_pois function")
 
@@ -135,7 +136,7 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
     - The method should be validated with different types of eye models.
     - Unit testing for this methodology should be added.
     """
-  
+
     # TODO: validate this method further with multiple different types of eye models
     # TODO: add testing method for this methodology
 
@@ -293,7 +294,7 @@ def calc_ellipsoid_registration(clip_data, on_model_loc, on_image_loc, axes, ini
     The optimization minimizes the residuals between the clip data and the ellipsoid surface,
     as well as the alignment error for the optic nerve location.
     """
-    
+
     logger.debug("Starting calc_ellipsoid_registration function")
 
     if initial_guess is None:
