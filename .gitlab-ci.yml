@@ -1,0 +1,25 @@
+stages:
+  - manual
+  - build
+  - test
+  - deploy
+
+lint:
+  stage: test
+  image:
+    name: ghcr.io/astral-sh/uv:python3.12-alpine
+  script:
+    - uvx hatch fmt --check
+
+test:
+  stage: test
+  image:
+    name: ghcr.io/astral-sh/uv:debian
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.8"]
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - uv python install $PYTHON_VERSION
+    - uvx hatch test -a
