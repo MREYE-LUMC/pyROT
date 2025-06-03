@@ -1,3 +1,5 @@
+"""Data structures for interacting with RayOcular eye models."""
+
 from __future__ import annotations
 
 import logging

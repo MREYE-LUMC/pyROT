@@ -1,3 +1,5 @@
+"""Export eye model geometries and regions of interest from RayOcular."""
+
 from __future__ import annotations
 
 import json

@@ -1,3 +1,5 @@
+"""Create eye models based on clip locations and optic disk location."""
+
 from __future__ import annotations
 
 import logging

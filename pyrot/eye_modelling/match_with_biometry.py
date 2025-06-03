@@ -1,3 +1,5 @@
+"""Match the eye model to biometry data."""
+
 from __future__ import annotations
 
 import logging

@@ -1,3 +1,5 @@
+"""Fit the sclera ellipsoid to a set of markers."""
+
 from __future__ import annotations
 
 import logging
@@ -485,6 +487,7 @@ def rotate_eye_model(
 
 def project_point_to_ellipse(center, axes, point):
     """Projects a point onto the boundary of an ellipse.
+
     Does this by first calculating the function of the line between the point and the center of the sclera.
     Subsequently, the intersection between this line and the sclera ellipse is calculated.
 
@@ -526,8 +529,7 @@ def project_point_to_ellipse(center, axes, point):
 
 
 def calc_angle_between_points(center, from_point, to_point):
-    """Computes the angle (in degrees) needed to rotate from one point to another,
-    relative to the same center.
+    """Computes the angle (in degrees) needed to rotate from one point to another, relative to the same center.
 
     Parameters
     ----------

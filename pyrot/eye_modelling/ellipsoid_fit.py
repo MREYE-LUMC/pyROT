@@ -1,3 +1,5 @@
+"""Fit an ellipsoid to a set of marker locations."""
+
 from __future__ import annotations
 
 import logging

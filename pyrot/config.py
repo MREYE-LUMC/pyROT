@@ -1,3 +1,5 @@
+"""Configuration for pyROT."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
@@ -9,8 +11,9 @@ if TYPE_CHECKING:
 
 
 class Config:
-    r"""Configuration for pyROT.
-    Settings can be overwritten by `scripts\customization.py`, which is imported by `__common__.py`.
+    """Configuration for pyROT.
+
+    Settings can be overwritten by scripts/customization.py, which is imported by `__common__.py`.
     """
 
     ELLIPSOID_FIT_MINIMUM_MATRIX_CONDITION: float = 100
@@ -39,9 +42,9 @@ class Config:
     """The eye model number. Needs to be altered/ checked in the case of multiple eye models."""
 
     ROI_EXPORT_UNIT: Literal["Centimeter", "Millimeter"] = "Centimeter"
-    """The unit in which rois are exported."""
+    """The unit in which ROIs are exported."""
 
-    ROI_EXPORT_ROI_SUFFIX: str = None
+    ROI_EXPORT_ROI_SUFFIX: str | None = None
     """The suffix after the roi name of the rois that need to be exported.
 
     By default, there is no suffix in RayOcular.

@@ -1,3 +1,5 @@
+"""Data validation and field descriptors for pyROT data models."""
+
 from __future__ import annotations
 
 import dataclasses

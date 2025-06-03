@@ -1,3 +1,5 @@
+"""Interface for communicating with the RayStation API."""
+
 from __future__ import annotations
 
 import contextlib

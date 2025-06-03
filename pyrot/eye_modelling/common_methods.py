@@ -1,3 +1,5 @@
+"""Common methods for eye modelling."""
+
 from __future__ import annotations
 
 import logging
