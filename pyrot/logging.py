@@ -1,3 +1,9 @@
+"""Logging helpers for Pyrot.
+
+Provides a custom logging handler that displays messages in a message box,
+to make sure that important warnings and errors are noticed by the user.
+"""
+
 from __future__ import annotations
 
 import logging

@@ -1,3 +1,5 @@
+"""Common methods for eye modelling."""
+
 from __future__ import annotations
 
 import logging
@@ -9,8 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def getTranslationMatrix(x: float, y: float, z: float) -> np.ndarray:
-    """
-    Generate a translation matrix for 3D transformations.
+    """Generate a translation matrix for 3D transformations.
 
     Parameters
     ----------
@@ -30,8 +31,7 @@ def getTranslationMatrix(x: float, y: float, z: float) -> np.ndarray:
 
 
 def toRadians(angleDegrees: float) -> float:
-    """
-    Convert an angle from degrees to radians.
+    """Convert an angle from degrees to radians.
 
     Parameters
     ----------
@@ -47,8 +47,7 @@ def toRadians(angleDegrees: float) -> float:
 
 
 def toDegrees(angleRadians: float) -> float:
-    """
-    Convert an angle from radians to degrees.
+    """Convert an angle from radians to degrees.
 
     Parameters
     ----------
@@ -64,8 +63,7 @@ def toDegrees(angleRadians: float) -> float:
 
 
 def getIdentityMatrix() -> np.ndarray:
-    """
-    Returns a 4x4 identity matrix.
+    """Returns a 4x4 identity matrix.
 
     Returns
     -------
@@ -76,8 +74,7 @@ def getIdentityMatrix() -> np.ndarray:
 
 
 def getRotationMatrixX(angleDeg: float) -> np.ndarray:
-    """
-    Calculate the rotation matrix for a rotation around the X-axis.
+    """Calculate the rotation matrix for a rotation around the X-axis.
 
     Parameters
     ----------
@@ -96,8 +93,7 @@ def getRotationMatrixX(angleDeg: float) -> np.ndarray:
 
 
 def getRotationMatrixY(angleDeg: float) -> np.ndarray:
-    """
-    Generate a rotation matrix for a rotation around the Y-axis.
+    """Generate a rotation matrix for a rotation around the Y-axis.
 
     Parameters
     ----------
@@ -116,8 +112,7 @@ def getRotationMatrixY(angleDeg: float) -> np.ndarray:
 
 
 def getRotationMatrixZ(angleDeg: float) -> np.ndarray:
-    """
-    Generate a rotation matrix for a rotation around the Z-axis.
+    """Generate a rotation matrix for a rotation around the Z-axis.
 
     Parameters
     ----------
@@ -136,8 +131,7 @@ def getRotationMatrixZ(angleDeg: float) -> np.ndarray:
 
 
 def getEyeModelGeometry(eyeModel: object, structureType: str) -> object:
-    """
-    Retrieve the geometry for a specific structure type from the eye model.
+    """Retrieve the geometry for a specific structure type from the eye model.
 
     Parameters
     ----------
@@ -161,8 +155,7 @@ def getEyeModelGeometry(eyeModel: object, structureType: str) -> object:
 
 
 def getClipGeometries(eyeModel: object) -> list:
-    """
-    Retrieve all clip geometries from the eye model.
+    """Retrieve all clip geometries from the eye model.
 
     Parameters
     ----------
@@ -178,8 +171,7 @@ def getClipGeometries(eyeModel: object) -> list:
 
 
 def getEyeModelToPatientRotationMatrix(rotationXDeg: float, rotationYDeg: float, rotationZDeg: float) -> np.ndarray:
-    """
-    Calculate the rotation matrix to transform from eye model coordinates to patient coordinates.
+    """Calculate the rotation matrix to transform from eye model coordinates to patient coordinates.
 
     Parameters
     ----------

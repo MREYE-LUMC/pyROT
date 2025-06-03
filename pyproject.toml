@@ -35,6 +35,14 @@ exclude = [".github/", "docs/"]
 [tool.hatch.build.targets.wheel]
 packages = ["pyrot"]
 
+[tool.hatch.envs.default]
+installer = "uv"
+python = "3.8"
+
+[tool.hatch.envs.default.scripts]
+# Format docstrings according to numpydoc
+format-docstrings = "{env:HATCH_UV:uv} tool run pydocstringformatter --write {args:scripts tests pyrot standalone}"
+
 # Testing
 
 [[tool.hatch.envs.hatch-test.matrix]]
@@ -109,3 +117,10 @@ convention = "numpy"
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.pydocstringformatter]
+style = "numpydoc"
+max-line-length = 120
+max-summary-lines = 1
+summary-quotes-same-line = true
+linewrap-full-docstring = true

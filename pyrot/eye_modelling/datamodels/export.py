@@ -1,3 +1,5 @@
+"""Export eye model geometries and regions of interest from RayOcular."""
+
 from __future__ import annotations
 
 import json
@@ -24,8 +26,7 @@ def full_export(
     export_suffix: str,
     roi_export_unit: Literal["Millimeters", "Centimeters"],
 ):
-    """
-    Exports all relevant data for a given eye model to a structured output directory.
+    """Exports all relevant data for a given eye model to a structured output directory.
     This function gathers patient, case, and examination information, creates a uniquely named
     export directory, and exports ROI geometries, eye model data, and points of interest (POIs)
     for the specified eye model number.
@@ -95,10 +96,11 @@ def export_roi_geometries(
     export_suffix: str,
     roi_export_unit: str,
 ):
-    """
-    Exports ROI geometries from a given structure set to STL files.
-    The function iterates over the ROI geometries in the provided structure set, filters them based on the specified export suffix,
-    and exports each selected geometry as an STL file to the specified output directory. Exported files are named according to the ROI name,
+    """Exports ROI geometries from a given structure set to STL files.
+    The function iterates over the ROI geometries in the provided structure set, filters them based on the specified
+    export suffix,
+    and exports each selected geometry as an STL file to the specified output directory. Exported files are named
+    according to the ROI name,
     with spaces replaced by underscores, and include the export unit in the filename.
 
     Parameters
@@ -168,8 +170,7 @@ def export_roi_geometries(
 
 
 def export_eye_model(structure_set, output_directory: Path, eyemodelnr: int):
-    """
-    Export an eye model to a JSON file.
+    """Export an eye model to a JSON file.
 
     Parameters
     ----------
@@ -198,8 +199,7 @@ def export_eye_model(structure_set, output_directory: Path, eyemodelnr: int):
 
 
 def export_pois(structure_set, output_directory: Path, examination_name: str):
-    """
-    Exports points of interest (POIs) from a structure set to a JSON file.
+    """Exports points of interest (POIs) from a structure set to a JSON file.
 
     Parameters
     ----------

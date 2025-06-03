@@ -28,3 +28,6 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
       - name: Run tests
         run: uvx hatch test
+      - name: Lint docstrings
+        if: always() # Run even if previous step fails
+        run: uvx pydocstringformatter --exit-code scripts tests pyrot standalone

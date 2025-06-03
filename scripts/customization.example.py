@@ -1,4 +1,4 @@
-"""Site-specific customizations for pyROT
+"""Site-specific customizations for pyROT.
 
 This example file demonstrates how to customize pyROT's behaviour.
 To use this file, rename it to `customization.py` and modify the contents as needed.

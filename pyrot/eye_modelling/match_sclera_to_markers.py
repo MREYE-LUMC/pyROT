@@ -1,3 +1,5 @@
+"""Fit the sclera ellipsoid to a set of markers."""
+
 from __future__ import annotations
 
 import logging
@@ -23,8 +25,7 @@ def match_sclera_to_markers(
     marker_location: str,
     center_translation: list | None = None,
 ) -> None:
-    """
-    Fit an ellipsoid to the markers, without using biometry data.
+    """Fit an ellipsoid to the markers, without using biometry data.
 
     Parameters
     ----------
@@ -129,8 +130,7 @@ def calc_sclera_center_to_match_white_to_white(
     evaluations_stop: float = 0.2,
     n_evaluations: int = 31,
 ) -> float:
-    """
-    Calculate the ellipsoid center location so it matches the WTW-width at vitreous depth.
+    """Calculate the ellipsoid center location so it matches the WTW-width at vitreous depth.
     This is to ensure the models limbus diameter matches the measured limbus diameter/ White To White,
     without compromising on correctness of anterior chamber biometry.
 
@@ -226,8 +226,7 @@ def calc_sclera_center_to_match_white_to_white(
 def calc_sclera_ellipse_for_center(
     structure_set: object, eye_model_parameters: object, marker_location: str, center_translations: list
 ) -> list:
-    """
-    Returns best fitting sclera ellipse radii to marker locations for one or an array of ellipse center locations.
+    """Returns best fitting sclera ellipse radii to marker locations for one or an array of ellipse center locations.
 
     Parameters
     ----------
@@ -317,8 +316,7 @@ def calc_sclera_ellipse_for_center(
 
 
 def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list: list) -> float or list:
-    """
-    Determines limbus half-axes of one or an array of sclera ellipses so it matches the vitreous depth.
+    """Determines limbus half-axes of one or an array of sclera ellipses so it matches the vitreous depth.
 
     Parameters
     ----------
@@ -389,8 +387,7 @@ def rotate_eye_model(
     roi_name_vitreous: str,
     based_on: str = "optic_disk",
 ):
-    """
-    Rotates the eye model automatically, based on user input.
+    """Rotates the eye model automatically, based on user input.
 
     Parameters
     ----------
@@ -489,8 +486,8 @@ def rotate_eye_model(
 
 
 def project_point_to_ellipse(center, axes, point):
-    """
-    Projects a point onto the boundary of an ellipse.
+    """Projects a point onto the boundary of an ellipse.
+
     Does this by first calculating the function of the line between the point and the center of the sclera.
     Subsequently, the intersection between this line and the sclera ellipse is calculated.
 
@@ -532,9 +529,7 @@ def project_point_to_ellipse(center, axes, point):
 
 
 def calc_angle_between_points(center, from_point, to_point):
-    """
-    Computes the angle (in degrees) needed to rotate from one point to another,
-    relative to the same center.
+    """Computes the angle (in degrees) needed to rotate from one point to another, relative to the same center.
 
     Parameters
     ----------
@@ -573,8 +568,7 @@ def calc_rotation_to_align_points(
     optic_disc_eyemodel: tuple,
     optic_disc_poi: tuple,
 ) -> float:
-    """
-    Main wrapper function to compute the optimal rotation angle (in degrees)
+    """Main wrapper function to compute the optimal rotation angle (in degrees)
     to align an ellipse_point with the projection of a manual_input.
 
     Parameters

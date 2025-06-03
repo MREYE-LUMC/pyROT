@@ -1,3 +1,5 @@
+"""Interface for communicating with the RayStation API."""
+
 from __future__ import annotations
 
 import contextlib
@@ -11,8 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_current_patient():
-    """
-    Loads and returns the current patient associated with the active examination.
+    """Loads and returns the current patient associated with the active examination.
 
     Returns
     -------
@@ -23,8 +24,7 @@ def load_current_patient():
 
 
 def load_current_structureset():
-    """
-    Loads and returns the current StructureSet associated with the active examination.
+    """Loads and returns the current StructureSet associated with the active examination.
 
     Returns
     -------
@@ -40,8 +40,7 @@ def load_current_structureset():
 
 
 def load_eyemodel(structure_set, eyemodelnr):
-    """
-    Load geometry generators and eye model parameters from a structure set.
+    """Load geometry generators and eye model parameters from a structure set.
 
     Parameters
     ----------
@@ -65,8 +64,7 @@ def load_eyemodel(structure_set, eyemodelnr):
 
 
 def load_pois(structure_set, poi_type: Optional[str] = None, poi_name_contains: Optional[str] = None):
-    """
-    Load POIs (Points of Interest) from a structure set, optionally filtering by type or name substring.
+    """Load POIs (Points of Interest) from a structure set, optionally filtering by type or name substring.
 
     Parameters
     ----------
@@ -94,8 +92,7 @@ def load_pois(structure_set, poi_type: Optional[str] = None, poi_name_contains: 
 
 
 def load_rois(structure_set, roi_type: Optional[str] = None, roi_name_contains: Optional[str] = None):
-    """
-    Load ROIs (Regions of Interest) from a structure set, optionally filtering by type or name substring.
+    """Load ROIs (Regions of Interest) from a structure set, optionally filtering by type or name substring.
 
     Parameters
     ----------
@@ -123,8 +120,7 @@ def load_rois(structure_set, roi_type: Optional[str] = None, roi_name_contains: 
 
 
 def update_eye_model(eye_model_generators, new_values):
-    """
-    Update the eye model parameters with new values.
+    """Update the eye model parameters with new values.
 
     Parameters
     ----------

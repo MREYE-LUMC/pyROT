@@ -1,3 +1,5 @@
+"""Create eye models based on clip locations and optic disk location."""
+
 from __future__ import annotations
 
 import logging
@@ -15,9 +17,10 @@ logger = logging.getLogger(__name__)
 def match_ellipse_with_pois(
     eye_model_generators, eye_model_parameters, structure_set, input_ellipse, poi_type_clips, poi_type_on
 ):
-    """
-    Aligns the eye model's translation and rotation to best fit known clip locations (POIs) and the optic disk location.
-    This function updates the eye model center and rotation so that the model's sclera surface matches the positions of physical markers (clips) and the optic disk.
+    """Aligns the eye model's translation and rotation to best fit known clip locations (POIs) and the optic disk
+    location.
+    This function updates the eye model center and rotation so that the model's sclera surface matches the positions of
+    physical markers (clips) and the optic disk.
 
     Parameters
     ----------
@@ -99,8 +102,7 @@ def match_ellipse_with_pois(
 
 
 def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_model_loc_method):
-    """
-    Calculates the location of the optic nerve ROI on the unity circle for a given eye model.
+    """Calculates the location of the optic nerve ROI on the unity circle for a given eye model.
 
     This function determines the standardized location of the optic disk as if the eye model were positioned at the origin
     ([0, 0, 0]) with input angles [0, 0, 0] and sclera radii [1, 1, 1]. This is necessary for fitting procedures that
@@ -179,8 +181,7 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
 
 
 def registration_residuals(params, clip_data, optic_nerve_data, axes):
-    """
-    Compute the residuals for ellipsoid registration and optic nerve location alignment.
+    """Compute the residuals for ellipsoid registration and optic nerve location alignment.
 
     This function calculates the residuals between a set of 3D points (clip_data) and an ellipsoid model,
     as well as the normalized distance between the transformed optic nerve location and its model POI.
@@ -260,8 +261,7 @@ def registration_residuals(params, clip_data, optic_nerve_data, axes):
 
 
 def calc_ellipsoid_registration(clip_data, on_model_loc, on_image_loc, axes, initial_guess=None):
-    """
-    Perform ellipsoid registration to align clip data and optic nerve locations.
+    """Perform ellipsoid registration to align clip data and optic nerve locations.
 
     This function calculates the optimal translation and rotation parameters to align
     a set of 3D points (clip_data) with an ellipsoid defined by the given axes, while

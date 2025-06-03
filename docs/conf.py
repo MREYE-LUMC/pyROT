@@ -91,8 +91,8 @@ html_context = {
 
 autoapi_dirs = ["../pyrot"]
 autoapi_root = "api"
-# autoapi_options = [
-#     "members",
-#     "show-inheritance",
-#     "show-module-summary",
-# ]
+autoapi_options = [
+    "members",
+    "show-inheritance",
+    "show-module-summary",
+]

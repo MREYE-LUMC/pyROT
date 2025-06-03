@@ -1,3 +1,5 @@
+"""Match the eye model to biometry data."""
+
 from __future__ import annotations
 
 import logging
@@ -16,8 +18,7 @@ def calc_elliptical_cornea_radii(
     iris_thickness: float,
     shape_factor: float,
 ) -> tuple[float, float]:
-    """
-    Calculate the required cornea AP radius to have the required AD for an elliptical cornea model.
+    """Calculate the required cornea AP radius to have the required AD for an elliptical cornea model.
 
     Parameters
     ----------
@@ -86,8 +87,7 @@ def calc_spherical_cornea_radii(
     aqueous_depth: float,
     iris_thickness: float,
 ) -> float:
-    """
-    Determine the cornea radii for a spherical cornea based on a specific AD and limbus radius.
+    """Determine the cornea radii for a spherical cornea based on a specific AD and limbus radius.
     r = (a^2 + b^2)/2a with a = distance posterior corneal surface to anterior iris surface and b = limbus radius
     see also the folder 'documentation'.
 
@@ -128,8 +128,7 @@ def calc_iris_outerradius(
     iris_thickness: float,
     retina_thickness: float,
 ) -> float:
-    """
-    Calculate the required iris outer radius to have the correct vitreous depth (including lens and retina).
+    """Calculate the required iris outer radius to have the correct vitreous depth (including lens and retina).
 
     Parameters
     ----------
@@ -182,8 +181,7 @@ def calc_iris_outerradius(
 def match_eye_model(
     eye_model_generators: object, eye_model_parameters: object, biometry_data: dict, cornea_type: str
 ) -> None:
-    """
-    Match the eye model parameters with the provided biometry data.
+    """Match the eye model parameters with the provided biometry data.
     Make the iris outerradius such that the vitreous length is correct
     and subsequently make the cornea radii such that the AD is correct.
 
