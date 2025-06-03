@@ -3,7 +3,7 @@ requires = ["hatchling", "versioningit"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pyROT"
+name = "rayocular-toolbox"
 authors = [
     { name = "Jan-Willem Beenakker" },
     { name = "Lennart Pors" },
@@ -13,7 +13,7 @@ maintainers = [{ name = "MReye research group", email = "pyrot@mreye.nl" }]
 
 description = "A Python toolbox for ocular proton therapy planning in RayOcular"
 readme = "README.md"
-license = { file = "LICENSE.txt" }
+license = { file = "LICENSE" }
 keywords = ["RayOcular", "RayStation", "Proton therapy"]
 classifiers = [
     "Development Status :: 1 - Planning",
@@ -31,6 +31,9 @@ dynamic = ["version"]
 [tool.hatch.version]
 source = "versioningit"
 default-version = "0.0.0+unknown"
+
+[tool.hatch.build.targets.wheel]
+packages = [ "pyrot" ]
 
 # Testing
 
