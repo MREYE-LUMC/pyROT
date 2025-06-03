@@ -46,7 +46,7 @@ html_theme_options = {
         },
         {
             "name": "PyPI",
-            "url": "https://pypi.org/project/pyROT",
+            "url": "https://pypi.org/project/rayocular-toolbox",
             "icon": "fa-brands fa-python",
         },
         {
