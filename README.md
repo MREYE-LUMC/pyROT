@@ -30,6 +30,10 @@ If you want to contribute, please email us (pyrot@mreye.nl), [open a new discuss
 
 to be added
 
+## Documentation
+
+A preliminary version of the documentation is hosted on [Read the Docs](https://pyrot.readthedocs.io/en/latest/).
+
 ## Future ideas
 
 - Extend the `pyROT` package with more tools, such as to determine the optimal gazing angle for a given eye model.
