@@ -62,6 +62,8 @@ html_theme_options = {
     "show_toc_level": 1,
 }
 
+html_logo = "images/logo.png"
+
 if os.getenv("READTHEDOCS") == "True":
     git_branch = os.getenv("READTHEDOCS_GIT_IDENTIFIER", "main")
 else:
