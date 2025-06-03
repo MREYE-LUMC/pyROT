@@ -5,7 +5,7 @@ It currently consists of three parts:
 
 1. `pyROT` itself, which is Python package provides a set of tools to work with eye models in Python. This library is designed to be as vendor-agnostic as possible, allowing it to be used without RaySearch. Interactions with RaySearch are handled through `pyrot.ro_interface`;
 2. `scripts` contains a set of scripts that can be run from within RaySearch and perform common tasks, such as generating eye models. These scripts import the `pyROT` package for all calculations.
-3. `standalone`, as set of Python scripts that can be used without RaySearch, for example to analyse a large set of eye models (still to be added).
+3. `standalone`, a set of Python scripts that can be used without RaySearch, for example to analyse a large set of eye models (still to be added).
 
 In addition, we hope that the pyROT repository will provide a platform to exchange methods and scripts within the ocular Proton Therapy community.
 
