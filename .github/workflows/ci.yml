@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v3
+      - name: Format and lint
+        run: uvx hatch fmt --check
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v3
+      - name: Install Python
+        run: uv python install ${{ matrix.python-version }}
+      - name: Run tests
+        run: uvx hatch test
