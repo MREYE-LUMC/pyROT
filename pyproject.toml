@@ -3,7 +3,7 @@ requires = ["hatchling", "versioningit"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pyROT"
+name = "rayocular-toolbox"
 authors = [
     { name = "Jan-Willem Beenakker" },
     { name = "Lennart Pors" },
@@ -13,17 +13,14 @@ maintainers = [{ name = "MReye research group", email = "pyrot@mreye.nl" }]
 
 description = "A Python toolbox for ocular proton therapy planning in RayOcular"
 readme = "README.md"
-license = { file = "LICENSE.txt" }
+license = { file = "LICENSE" }
 keywords = ["RayOcular", "RayStation", "Proton therapy"]
 classifiers = [
     "Development Status :: 1 - Planning",
     "Programming Language :: Python :: 3",
 ]
-requires-python = ">=3.6,<3.9"  # RayOcular only supports Python 3.6 and 3.8
-dependencies = [
-    "numpy",
-    "pythonnet>=2.5.2",
-]
+requires-python = ">=3.6,<3.9" # RayOcular only supports Python 3.6 and 3.8
+dependencies = ["numpy", "pythonnet>=2.5.2"]
 dynamic = ["version"]
 
 # Hatch configuration
@@ -31,6 +28,12 @@ dynamic = ["version"]
 [tool.hatch.version]
 source = "versioningit"
 default-version = "0.0.0+unknown"
+
+[tool.hatch.build.targets.sdist]
+exclude = [".github/", "docs/"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pyrot"]
 
 # Testing
 
@@ -67,24 +70,22 @@ target-version = "py38"
 
 line-length = 120
 extend-include = ["*.ipynb"]
-exclude = [
-    "Examples/",
-]
+exclude = ["Examples/"]
 
 [tool.ruff.lint]
 preview = true
 extend-select = [
-    "LOG015",  # Root logger call
+    "LOG015", # Root logger call
 ]
 ignore = [
-    "RUF009",  # Function as dataclass default
-    "EM", # exception messages
+    "RUF009", # Function as dataclass default
+    "EM",     # exception messages
     "TRY003", # accept longer exception messages 
-    "S101", # accept use of assert as this is of use in RayOcular scripting
-    "N806", # TODO: snake_case implementation in next merge request
-    "N803", #TODO: snake_case implementation in next merge request
-    "N802", #TODO: snake_case implementation in next merge request
-    "PYI019"  # typing.Self is not available in Python 3.8
+    "S101",   # accept use of assert as this is of use in RayOcular scripting
+    "N806",   # TODO: snake_case implementation in next merge request
+    "N803",   #TODO: snake_case implementation in next merge request
+    "N802",   #TODO: snake_case implementation in next merge request
+    "PYI019", # typing.Self is not available in Python 3.8
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -92,8 +93,8 @@ ignore = [
     "INP001",  # __init__.py in implicit namespace package
 ]
 "tests/**" = [
-    "PLC2701",  # Private members
-    "PLR6301"
+    "PLC2701", # Private members
+    "PLR6301",
 ]
 
 [tool.ruff.lint.flake8-pytest-style]
