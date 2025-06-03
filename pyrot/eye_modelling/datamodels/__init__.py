@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from pyrot.eye_modelling.datamodels import export, models, validators
 
-"""
-PyROT Eye Modelling Datamodels
+"""PyROT Eye Modelling Datamodels
 ==============================
 
 This package provides python datamodels for the RayOcular eye-model parameters.

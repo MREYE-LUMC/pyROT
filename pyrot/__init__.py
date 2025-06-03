@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from pyrot import ro_interface
 
-"""
-Pyrot a package to support eye-modelling in RayOcular.
+"""Pyrot a package to support eye-modelling in RayOcular.
 
 Modules:
     config: Configuration settings for the package.

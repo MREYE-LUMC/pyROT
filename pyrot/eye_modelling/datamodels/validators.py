@@ -21,8 +21,7 @@ class ValidationError(Exception):
 
 
 class RayOcularField(Generic[Instance, Value]):
-    """
-    A descriptor class that provides validation for a field.
+    """A descriptor class that provides validation for a field.
 
     Parameters
     ----------
@@ -81,8 +80,7 @@ class RayOcularField(Generic[Instance, Value]):
         setattr(instance, self.private_name, self.validate(value))
 
     def validate(self, value):
-        """
-        Validates the given value using the provided validator.
+        """Validates the given value using the provided validator.
 
         Parameters
         ----------
@@ -108,8 +106,7 @@ class RayOcularField(Generic[Instance, Value]):
 # Factory function to create a validated field.
 # This is needed to make type checkers accept validated fields for type-annotated fields.
 def rayocular_field(validator: Callable[[Any], Value], name: str | None = None) -> Value:
-    """
-    Creates a validated field with the given validator.
+    """Creates a validated field with the given validator.
 
     Parameters
     ----------

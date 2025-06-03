@@ -13,8 +13,7 @@ def ellipsoid_fit(
     markers_in_eye: list[list[float]],
     eye_shape: str,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, float]:
-    """
-    Fit an ellipsoid/sphere/paraboloid/hyperboloid to a set of xyz data points.
+    """Fit an ellipsoid/sphere/paraboloid/hyperboloid to a set of xyz data points.
 
     Parameters
     ----------

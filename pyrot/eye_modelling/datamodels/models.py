@@ -17,8 +17,7 @@ _Self = TypeVar("_Self")
 
 
 class BaseModel:
-    """
-    Abstract base class for RayOcular data models.
+    """Abstract base class for RayOcular data models.
 
     Methods
     -------
@@ -48,8 +47,7 @@ class BaseModel:
 
     @classmethod
     def from_rayocular(cls: type[_Self], rayocular_object) -> _Self:
-        """
-        Converts a RayOcular object to an instance of the data model.
+        """Converts a RayOcular object to an instance of the data model.
 
         Parameters
         ----------
@@ -75,8 +73,7 @@ class BaseModel:
         return cls(**model_fields)
 
     def to_rayocular(self) -> dict[str, Any]:
-        """
-        Converts the data model instance to a RayOcular dictionary.
+        """Converts the data model instance to a RayOcular dictionary.
 
         Returns
         -------

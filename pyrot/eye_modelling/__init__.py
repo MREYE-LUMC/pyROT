@@ -8,8 +8,7 @@ from pyrot.eye_modelling import (
     match_with_biometry,
 )
 
-"""
-Eye modelling
+"""Eye modelling
 =============
 
 The eye_modelling module provides methods matching the geometric eye-model to imaging and biometry data.
