@@ -3,7 +3,7 @@
 Python RayOcular Tools is a Python library to complement RayOcular, an eye-specific module of RaySearch.
 It currently consists of three parts:
 
-1. `pyROT` itself, which is a Python package that provides a set of tools to work with eye models in Python. This library is designed to be as vendor-agnostic as possible, allowing it to be used without RaySearch. Interactions with RaySearch are handled through `pyrot.ro_interface`;
+1. `pyROT` itself, which is a Python package that provides a set of tools to work with eye models in Python. This library is designed to be as vendor-agnostic as possible, allowing it to be used without RaySearch. Interactions with RaySearch are handled through {py:mod}`pyrot.ro_interface`;
 2. `scripts` contains a set of scripts that can be run from within RaySearch and perform common tasks, such as generating eye models. These scripts import the `pyROT` package for all calculations.
 3. `standalone`, a set of Python scripts that can be used without RaySearch, for example to analyse a large set of eye models (still to be added).
 
