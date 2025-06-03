@@ -1,5 +1,10 @@
 # pyROT: Python RayOcular Tools
 
+[![PyPI - Version](https://img.shields.io/pypi/v/rayocular-toolbox)](https://pypi.org/project/rayocular-toolbox)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FMREYE-LUMC%2FpyROT%2Fmain%2Fpyproject.toml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MREYE-LUMC/pyROT/ci.yml)
+[![Documentation Status](https://readthedocs.org/projects/pyrot/badge/?version=latest)](https://pyrot.readthedocs.io/en/latest/?badge=latest)
+
 Python RayOcular Tools is a Python library to complement RayOcular, an eye-specific module of RaySearch.
 It currently consists of three parts:
 
@@ -24,6 +29,10 @@ If you want to contribute, please email us (pyrot@mreye.nl), [open a new discuss
 ## Installation
 
 to be added
+
+## Documentation
+
+A preliminary version of the documentation is hosted on [Read the Docs](https://pyrot.readthedocs.io/en/latest/).
 
 ## Future ideas
 
