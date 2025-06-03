@@ -59,7 +59,7 @@ html_theme_options = {
     "logo": {
         "text": "pyROT",
     },
-    "show_toc_level": 1
+    "show_toc_level": 1,
 }
 
 if os.getenv("READTHEDOCS") == "True":
