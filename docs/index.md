@@ -8,6 +8,7 @@
 ```{image} _static/images/logo-fullsize.png
 :align: right
 :class: logo
+:alt: pyROT's logo: a blue snake wearing an eye patch and a pirate hat with a styled RayStation logo.
 ```
 
 Python RayOcular Tools is a Python library to complement RayOcular, an eye-specific module of RaySearch.
