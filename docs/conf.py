@@ -36,6 +36,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]
+html_css_files = ["custom.css"]
 
 html_theme_options = {
     "icon_links": [
@@ -62,7 +63,7 @@ html_theme_options = {
     "show_toc_level": 1,
 }
 
-html_logo = "images/logo.png"
+html_logo = "_static/images/logo.png"
 
 if os.getenv("READTHEDOCS") == "True":
     git_branch = os.getenv("READTHEDOCS_GIT_IDENTIFIER", "main")
