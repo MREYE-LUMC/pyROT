@@ -74,7 +74,7 @@ def match_ellipse_with_pois(
     # radii of the ellipse to be fitted to the POI's
     if input_ellipse == "sclera_radii":
         sclera_radii = eye_model_parameters.ScleraSemiAxis
-        # note that the pois are clicked at the center of the clips, which means we should subtract .5*clip_thickness to get the real sclera radii
+        # note that the pois are clicked at the center of the clips, which means we should add 0.5 * clip_thickness to obtain the effective sclera radii at the POI locations
         clip_thickness = Config.CLIP_THICKNESS
         axes = (
             sclera_radii["x"] + (0.5 * clip_thickness),
