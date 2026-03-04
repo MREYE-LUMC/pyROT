@@ -30,10 +30,10 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-      - name: Show environment info
-        run: uvx hatch env show -i
+      - name: Install dependencies
+        run: uv sync
       - name: Run tests
-        run: uvx hatch test
+        run: uv run pytest ./tests/
       - name: Lint docstrings
         if: always() # Run even if previous step fails
         run: uvx pydocstringformatter --exit-code scripts tests pyrot standalone
