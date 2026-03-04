@@ -339,7 +339,7 @@ def calc_ellipsoid_registration_with_fitted_rotation(clip_data, on_model_loc, on
     fitted_center : np.ndarray
         A (3,) array representing the estimated center of the ellipsoid.
     fitted_angles : np.ndarray
-        A (3,) array of rotation angles (in radians) fitted to the data.
+        A (3,) array of rotation angles (in degrees) fitted to the data.
     Notes
     -----
     - This function relies on `calc_residuals_for_registration_with_fitted_rotation` for computing
