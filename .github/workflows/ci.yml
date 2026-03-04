@@ -30,6 +30,8 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
+      - name: Show environment info
+        run: uvx hatch env show -i
       - name: Run tests
         run: uvx hatch test
       - name: Lint docstrings
