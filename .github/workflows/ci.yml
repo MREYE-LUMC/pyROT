@@ -1,16 +1,19 @@
 on:
   push:
-    branches:
-      - "*"
+    branches: ["*"]
+  pull_request:
+    branches: [main]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up uv
         id: setup-uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
       - name: Format and lint
         run: uvx hatch fmt --check
 
@@ -20,14 +23,17 @@ jobs:
       matrix:
         python-version: [3.8]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up uv
         id: setup-uv
-        uses: astral-sh/setup-uv@v3
-      - name: Install Python
-        run: uv python install ${{ matrix.python-version }}
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: uv sync
       - name: Run tests
-        run: uvx hatch test
+        run: uv run pytest ./tests/
       - name: Lint docstrings
         if: always() # Run even if previous step fails
         run: uvx pydocstringformatter --exit-code scripts tests pyrot standalone
