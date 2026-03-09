@@ -102,18 +102,24 @@ def match_ellipse_with_pois(
 
         # get the location of the optic nerve in the eye model
         on_model = ro_interface.load_rois(structure_set, roi_name_contains=Config.ROI_NAME_OD)
+
+        # the item that comes from load_rois is a list, get the first item on that list (and give a warning if the list has length >1)
         if len(on_model) > 1:
             logger.warning("Multiple optic disk models found, taking the first one")
-            on_model = on_model[0]
+
+        on_model = on_model[0]
 
         on_model_center = on_model.GetCenterOfRoi()
         on_model_loc_patient = np.array([on_model_center["x"], on_model_center["y"], on_model_center["z"]])
 
         # get the location of the center of the vitreous body (thus of the sclera) in the eye model
         vitreous_model = ro_interface.load_rois(structure_set, roi_name_contains=Config.ROI_NAME_VITREOUS)
+
+        # the item that comes from load_rois is a list, get the first item on that list (and give a warning if the list has length >1)
         if len(vitreous_model) > 1:
             logger.warning("Multiple vitreous body models found, taking the first one")
-            vitreous_model = vitreous_model[0]
+
+        vitreous_model = vitreous_model[0]
 
         vitreous_model_center = vitreous_model.GetCenterOfRoi()
         vitreous_model_loc_patient = np.array(
