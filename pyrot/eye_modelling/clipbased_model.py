@@ -28,10 +28,13 @@ def match_ellipse_with_pois(
     poi_type_on,
     rotation_method,
 ):
-    """
-    Matches the translation and rotation of the eye model to correspond with known clip locations (on the sclera) and optic disk location.
-    Rotation of the eye model is either determined by minimizing the distance to the optic disk POI, or by rotating the model such that the eye has the correct orientation.
-    In the first case the eye center and rotation are fit parameters, while in  latter case the eye center is the only fitting parameter.
+    """Matches the translation and rotation of the eye model to correspond with known clip locations (on the sclera) and
+    optic disk location.
+    Rotation of the eye model is either determined by minimizing the distance to the optic disk POI, or by rotating the
+    model such that the eye has the correct orientation.
+    In the first case the eye center and rotation are fit parameters, while in  latter case the eye center is the only
+    fitting parameter.
+
     Parameters
     ----------
     eye_model_generators : object
@@ -48,12 +51,14 @@ def match_ellipse_with_pois(
         The type of POI representing the optic disk location.
     rotation_method : str
         Method to determine rotation, either "minimize_distance" (fit rotation to minimize optic disk poi - optic disk center distance) or "fixed_gaze" (calculate rotation based on the location of the optic disk POI).
+
     Raises
     ------
     ValueError
         If there are multiple or no POIs of the specified optic disk type.
     NotImplementedError
         If the specified input_ellipse or rotation_method is not implemented.
+
     Notes
     -----
     This function updates the eye model parameters (translation, rotation) in-place
@@ -181,12 +186,14 @@ def match_ellipse_with_pois(
 
 
 def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_model_loc_method):
-    """
-    Determines the standardized location of the optic disk as if the eye model were positioned at the origin
-    ([0, 0, 0]) with input angles [0, 0, 0] and sclera radii of [1, 1, 1]. This is necessary as the method where rotation is fitted, relies
+    """Determines the standardized location of the optic disk as if the eye model were positioned at the origin
+    ([0, 0, 0]) with input angles [0, 0, 0] and sclera radii of [1, 1, 1]. This is necessary as the method where
+    rotation is fitted, relies
     on a methodology where all pois are translated to the unity circle.
-    Currently, only the "unity_circle_standard_model" method is implemented, which assumes the optic disk location within the
+    Currently, only the "unity_circle_standard_model" method is implemented, which assumes the optic disk location
+    within the
     eye model has not been altered.
+
     Parameters
     ----------
     geometry_generators : object
@@ -195,16 +202,19 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
         An object containing parameters of the eye model, including optic nerve rotation.
     on_model_loc_method : str
         The method used to determine the ON model location. Currently, only "unity_circle_standard_model" is supported.
+
     Returns
     -------
     on_model_loc_patient : numpy.ndarray
         The standardized location of the optic nerve in the eye model, adjusted for eye laterality.
+
     Raises
     ------
     AssertionError
         If the optic nerve (and thus the optic disk) has been manually rotated within the eye model, violating fit assumptions.
     NotImplementedError
         If the specified `on_model_loc_method` is not implemented.
+
     Notes
     -----
     - The function assumes the optic disk location has not been manually changed within the eye model.
@@ -252,10 +262,11 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
 
 
 def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, optic_nerve_data, axes):
-    """
-    Calculate residuals for registration of ellipsoid model with fitted rotation.
-    This function computes the residuals between a set of 3D points (clip_data) and a rotated, translated ellipsoid model,
+    """Calculate residuals for registration of ellipsoid model with fitted rotation.
+    This function computes the residuals between a set of 3D points (clip_data) and a rotated, translated ellipsoid
+    model,
     as well as the normalized squared distance between the predicted and observed optic nerve (ON) locations.
+
     Parameters
     ----------
     params : array-like, shape (6,)
@@ -272,6 +283,7 @@ def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, opti
                 The observed location of the optic disk in the image data.
     axes : array-like, shape (3,)
         The semi-axes lengths of the eye model.
+
     Returns
     -------
     residuals : ndarray, shape (N+1,)
@@ -324,10 +336,10 @@ def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, opti
 
 
 def calc_ellipsoid_registration_with_fitted_rotation(clip_data, on_model_loc, on_image_loc, axes, initial_guess=None):
-    """
-    Performs a least-squares optimization to register an ellipsoid to the provided
+    """Performs a least-squares optimization to register an ellipsoid to the provided
     clip data, fitting both the center and rotation angles based on the clip locations and the optic
     disk POI. The optimization minimizes the residuals between the transformed model and the observed data.
+
     Parameters
     ----------
     clip_data : np.ndarray
@@ -341,12 +353,14 @@ def calc_ellipsoid_registration_with_fitted_rotation(clip_data, on_model_loc, on
     initial_guess : np.ndarray or None, optional
         Initial guess for the optimization parameters (center and rotation angles).
         If None, the center is initialized to the mean of `clip_data` and angles to zero.
+
     Returns
     -------
     fitted_center : np.ndarray
         A (3,) array representing the estimated center of the ellipsoid.
     fitted_angles : np.ndarray
         A (3,) array of rotation angles (in degrees) fitted to the data.
+
     Notes
     -----
     - This function relies on `calc_residuals_for_registration_with_fitted_rotation` for computing
@@ -375,12 +389,12 @@ def calc_ellipsoid_registration_with_fitted_rotation(clip_data, on_model_loc, on
 def calc_residuals_for_registration_with_calculated_rotation(
     params, clip_data, optic_nerve_data, axes, vitreous_body_center, eye_rotation_in, eye_translation_input
 ):
-    """
-    Calculate residuals for registration by computing distances from clip points to an ellipsoid.
+    """Calculate residuals for registration by computing distances from clip points to an ellipsoid.
     This function translates the clip data according to the provided center parameters, computes
     the necessary rotation to align the model with the observed optic nerve location, applies
     the rotation, and then calculates the residuals (distance to the ellipsoid surface) for each
     clip point.
+
     Parameters
     ----------
     params : array-like, shape (3,)
@@ -401,6 +415,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
         Dictionary containing the current eye rotation angles in degrees, with keys "x" and "z" ("y"  is not used and should be set to 0).
     eye_translation_input : array-like, shape (3,)
         The initial translation/ center location of the eye model.
+
     Returns
     -------
     residuals_clips : ndarray, shape (N,)
@@ -466,12 +481,12 @@ def calc_ellipsoid_registration_with_calculated_rotation(
     eye_translation_in,
     initial_guess=None,
 ):
-    """
-    Registers an ellipsoid model to clip data using least squares optimization,
+    """Registers an ellipsoid model to clip data using least squares optimization,
     incorporating calculated eye rotation and translation. Rotation is based purely on the
     location of the optic disk, while translation is based on the clip location. For each
     evaluated center translation, the corresponding rotation is calculated and thereafter,
     the residuals are calculated.
+
     Parameters
     ----------
     clip_data : np.ndarray
@@ -490,10 +505,12 @@ def calc_ellipsoid_registration_with_calculated_rotation(
         Initial eye translation parameters.
     initial_guess : np.ndarray, optional
         Initial guess for the optimizer. If None, the mean of `clip_data` is used.
+
     Returns
     -------
     np.ndarray
         Optimized parameters resulting from the registration process.
+
     Notes
     -----
     This function uses `scipy.optimize.least_squares` to minimize the residuals
@@ -517,9 +534,11 @@ def calc_ellipsoid_registration_with_calculated_rotation(
 def calc_roll_and_pitch_of_shifted_eyemodel(
     retina_center_location, axes, on_model_loc, on_image_loc, eye_translation_before_shift, eye_translation_after_shift
 ):
-    """
-    Calculates the roll and pitch angles required to align a shifted eye model with observed optic disc positions.
-    This function computes the roll and pitch corrections for an eye model after a translational shift, based on the locations of the retina center, retina axes, optic disc model center, and the optic disc point of interest (POI) as clicked on the MRI image.
+    """Calculates the roll and pitch angles required to align a shifted eye model with observed optic disc positions.
+    This function computes the roll and pitch corrections for an eye model after a translational shift, based on the
+    locations of the retina center, retina axes, optic disc model center, and the optic disc point of interest (POI) as
+    clicked on the MRI image.
+
     Parameters
     ----------
     retina_center_location : array-like, shape (3,)
@@ -534,12 +553,14 @@ def calc_roll_and_pitch_of_shifted_eyemodel(
         The translation vector of the eye center before the shift.
     eye_translation_after_shift : array-like, shape (3,)
         The translation vector of the eye center after the shift.
+
     Returns
     -------
     roll_angle_deg : float
         The roll angle (in degrees) required to align the model with the observed optic disc position.
     pitch_angle_deg : float
         The pitch angle (in degrees) required to align the model with the observed optic disc position.
+
     Notes
     -----
     Coordinates are assumed to be in the (x, y, z) or (rl, ap, is) convention.
