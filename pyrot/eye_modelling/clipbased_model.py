@@ -1,10 +1,11 @@
-from __future__ import annotations
-
 """Clip-based registration of the eye model to image and marker data.
 
 This module provides functions to align an eye model to patient-specific data
-using scleral clip positions and optic nerve/disk–related points of interest.
+using scleral clip positions and optic nerve/disk-related points of interest.
 """
+
+from __future__ import annotations
+
 import logging
 
 import numpy as np
