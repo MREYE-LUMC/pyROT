@@ -22,7 +22,7 @@ eyemodelnr = Config.EYE_MODEL_NR
 input_ellipse = "sclera_radii"
 poi_type_clips = r"Registration"
 poi_type_on = r"LocalizationPoint"
-rotation_method = "fixed_gaze"  # 'minimize_distance' (the rotation, like the translation is fitted such that the optic disk center - optic disk poi distance is minimal)
+rotation_method = "fixed_gaze"  # 'minimize_distance' (both the eye translation and rotation are fitted, such that both the clip-sclera as the optic disk center - optic disk poi distance is minimal)
 # or 'fixed_gaze'(only the translation of the eye is fitted to minimize clip-sclera distance; the corresponding eye-rotation is calculated such that the eye maintains a straight-ahead gaze, based on the eye-center and optic nerve location.)
 
 ###
