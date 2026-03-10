@@ -28,10 +28,9 @@ def match_ellipse_with_pois(
     poi_type_on,
     rotation_method,
 ):
-    """Matches the translation and rotation of the eye model to correspond with known clip locations (on the sclera) and
-    optic disk location.
+    """Registers the eye model to to the clip locations (on the sclera) and optic disk location.
     Rotation of the eye model is either determined by minimizing the distance to the optic disk POI, or by rotating the
-    model such that the eye has the correct orientation.
+    model such that the visual axis goes through the eye center and optic disk POI.
     In the first case the eye center and rotation are fit parameters, while in  latter case the eye center is the only
     fitting parameter.
 
