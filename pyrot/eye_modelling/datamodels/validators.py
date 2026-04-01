@@ -37,7 +37,7 @@ class ValidatedField(Generic[Value]):
     ----------
     validator : Callable[[Any], Value]
         A callable object that performs the validation.
-    default: Value, optional
+    default : Value, optional
         The default value for the field. If not provided, the field will be required and must be set explicitly.
 
     Attributes
@@ -125,9 +125,9 @@ class RayOcularField(ValidatedField[Value]):
     ----------
     validator : Callable[[Any], Value]
         A callable object that performs the validation.
-    name: str | None
+    name : str | None
         The RayOcular name of the field. This is used for serialization and deserialization to RayOcular.
-    default: Value, optional
+    default : Value, optional
         The default value for the field. If not provided, the field will be required and must be set explicitly.
 
     Attributes
@@ -173,8 +173,31 @@ class RayOcularField(ValidatedField[Value]):
         self._default = default
 
 
-def dataclass(cls: type[Value]) -> Callable[..., Value]:
-    def validate(value) -> Value:
+T = TypeVar("T")
+
+
+def dataclass(cls: type[T]) -> Callable[..., T]:
+    """Validator for dataclasses.
+
+    Checks if the value is an instance of the dataclass or a dict that can be used to create an instance of the dataclass.
+
+    Parameters
+    ----------
+    cls : type[T]
+        The dataclass type to validate against.
+
+    Returns
+    -------
+    Callable[..., T]
+        A validator function that can be used to validate instances of the dataclass.
+
+    Raises
+    ------
+    ValueError
+        If the value is not an instance of the dataclass or a dict that can be used to create an instance of the dataclass.
+    """
+
+    def validate(value) -> T:
         if isinstance(value, cls):
             return value
 
@@ -187,6 +210,23 @@ def dataclass(cls: type[Value]) -> Callable[..., Value]:
 
 
 def positive_float(value: Any) -> float:
+    """Validator for positive floats.
+
+    Parameters
+    ----------
+    value : Any
+        The value to validate.
+
+    Returns
+    -------
+    float
+        The validated positive float value.
+
+    Raises
+    ------
+    ValueError
+        If the value is not a positive float.
+    """
     if isinstance(value, float) and value >= 0:
         return value
 
@@ -195,18 +235,33 @@ def positive_float(value: Any) -> float:
 
 # Use a dataclass because of JSON serialization
 @dataclasses.dataclass(frozen=True)
-class Vector3(Generic[Value]):
-    x: Value
-    y: Value
-    z: Value
-
-
-T = TypeVar("T")
+class Vector3(Generic[T]):
+    x: T
+    y: T
+    z: T
 
 
 def vector3(
     item_validator: Callable[..., T],
 ) -> Callable[[Any], Vector3[T]]:
+    """Validator for Vector3 objects.
+
+    Parameters
+    ----------
+    item_validator : Callable[..., T]
+        A validator function for the individual components of the vector.
+
+    Returns
+    -------
+    Callable[[Any], Vector3[T]]
+        A validator function that can be used to validate Vector3 objects.
+
+    Raises
+    ------
+    ValueError
+        If the value is not a valid Vector3 object.
+    """
+
     def validate(value: Any) -> Vector3[T]:
         if isinstance(value, Vector3):
             return value
@@ -227,9 +282,22 @@ def vector3(
 
 
 def literal(type_: type[T]) -> Callable[[Any], T]:
+    """Validator for literal values.
+
+    Parameters
+    ----------
+    type_ : type[T]
+        The type containing the allowed literal values.
+
+    Returns
+    -------
+    Callable[[Any], T]
+        A validator function that can be used to validate literal values.
+    """
+
     def validate(value: Any) -> T:
-        allowed = get_args(type_)  # type: ignore
-        if value in allowed:  # type: ignore
+        allowed = get_args(type_)
+        if value in allowed:
             return value
 
         raise ValueError(f"Expected one of {allowed}, got {value}.")
@@ -238,6 +306,19 @@ def literal(type_: type[T]) -> Callable[[Any], T]:
 
 
 def optional(inner: Callable[..., T]) -> Callable[[Any], T | None]:
+    """Validator for optional values.
+
+    Parameters
+    ----------
+    inner : Callable[..., T]
+        The validator function for the non-optional value.
+
+    Returns
+    -------
+    Callable[[Any], T | None]
+        A validator function to validate optional values.
+    """
+
     def validate(value: Any) -> T | None:
         if value is None:
             return None
