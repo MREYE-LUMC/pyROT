@@ -125,7 +125,7 @@ class RayOcularField(ValidatedField[Value]):
     ----------
     validator : Callable[[Any], Value]
         A callable object that performs the validation.
-    name : str | None
+    name : str
         The RayOcular name of the field. This is used for serialization and deserialization to RayOcular.
     default : Value, optional
         The default value for the field. If not provided, the field will be required and must be set explicitly.
@@ -167,7 +167,7 @@ class RayOcularField(ValidatedField[Value]):
     ...         self.age = age
     """
 
-    def __init__(self, validator: Callable[[Any], Value], name: str | None, *, default: Value = ...) -> None:
+    def __init__(self, validator: Callable[[Any], Value], name: str, *, default: Value = ...) -> None:
         self.rayocular_name = name
         self.validator = validator
         self._default = default
