@@ -153,6 +153,7 @@ class BaseModel:
         if not is_dataclass(cls):
             raise NotImplementedError("from_dict is only implemented for dataclasses.")
 
+        data = data.copy()
         field_types = get_type_hints(cls)
 
         for field in fields(cls):
