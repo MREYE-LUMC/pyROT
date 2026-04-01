@@ -2,16 +2,21 @@
 
 from __future__ import annotations
 
+import json
 import logging
-from dataclasses import asdict, dataclass, fields, is_dataclass
-from typing import Any, TypeVar
+from dataclasses import MISSING, asdict, dataclass, fields, is_dataclass
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Literal, Optional, TypeVar, get_type_hints
 
 from pyrot.eye_modelling.datamodels import validators
 from pyrot.eye_modelling.datamodels.validators import (
     RayOcularField,
+    ValidatedField,
     Vector3,
-    rayocular_field,
 )
+
+if TYPE_CHECKING:
+    from os import PathLike
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +26,8 @@ _Self = TypeVar("_Self")
 class BaseModel:
     """Abstract base class for RayOcular data models.
 
+    For full functionality, all subclasses must be dataclasses and use the `RayOcularField` descriptor to define fields that correspond to RayOcular properties.
+
     Methods
     -------
     from_rayocular(cls, rayocular_object)
@@ -28,6 +35,12 @@ class BaseModel:
 
     to_rayocular(self)
         Converts the data model instance to a RayOcular object.
+
+    to_dict(self)
+        Converts the data model instance to a dictionary.
+
+    from_dict(cls, data)
+        Creates an instance of the data model from a dictionary.
     """
 
     @classmethod
@@ -96,146 +109,250 @@ class BaseModel:
 
         return rayocular_fields
 
+    def to_dict(self) -> dict[str, Any]:
+        """Converts the data model instance to a dictionary.
+
+        This method is only implemented for dataclasses.
+
+        Returns
+        -------
+        dict[str, Any]
+            A dictionary representation of the data model instance.
+
+        Raises
+        ------
+        NotImplementedError
+            If the data model instance is not a dataclass.
+        """
+        if is_dataclass(self):
+            return asdict(self)
+
+        raise NotImplementedError("to_dict is only implemented for dataclasses.")
+
+    @classmethod
+    def from_dict(cls: type[_Self], data: dict[str, Any]) -> _Self:
+        """Creates an instance of the data model from a dictionary.
+
+        This method is only implemented for dataclasses.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            A dictionary representation of the data model instance.
+
+        Returns
+        -------
+        BaseModel
+            An instance of the data model.
+
+        Raises
+        ------
+        NotImplementedError
+            If the data model class is not a dataclass.
+        """
+        if not is_dataclass(cls):
+            raise NotImplementedError("from_dict is only implemented for dataclasses.")
+
+        field_types = get_type_hints(cls)
+
+        for field in fields(cls):
+            field_type = field_types.get(field.name)
+
+            if field_type is None or isinstance(field_type, str):
+                raise TypeError(f"Failed to resolve type for field {field.name} in class {cls.__name__}.")
+
+            if field.name not in data:
+                if field.default is MISSING:
+                    raise ValueError(f"Missing field {field.name} in data.")
+
+                data[field.name] = field.default
+
+        return cls(**data)
+
 
 @dataclass
 class EyeModelMeasurements(BaseModel):
-    cornea_lens_distance: float = rayocular_field(validators.positive_float, "CorneaLensDistance")
-    eye_length: float = rayocular_field(validators.positive_float, "EyeLength")
-    eye_width: float = rayocular_field(validators.positive_float, "EyeWidth")
-    lens_thickness: float = rayocular_field(validators.positive_float, "LensThickness")
-    limbus_diameter: float = rayocular_field(validators.positive_float, "LimbusDiameter")
+    cornea_lens_distance: RayOcularField[float] = RayOcularField(validators.positive_float, "CorneaLensDistance")
+    eye_length: RayOcularField[float] = RayOcularField(validators.positive_float, "EyeLength")
+    eye_width: RayOcularField[float] = RayOcularField(validators.positive_float, "EyeWidth")
+    lens_thickness: RayOcularField[float] = RayOcularField(validators.positive_float, "LensThickness")
+    limbus_diameter: RayOcularField[float] = RayOcularField(validators.positive_float, "LimbusDiameter")
 
 
 @dataclass
 class AnteriorChamber(BaseModel):
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "ChamberLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(validators.vector3(validators.positive_float), "ChamberLocalScale")
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "ChamberLocalTranslation")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "ChamberLocalRotation")
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(validators.positive_float), "ChamberLocalScale"
+    )
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "ChamberLocalTranslation"
+    )
 
 
 @dataclass
 class CiliaryBody(BaseModel):
-    base_curvature: float = rayocular_field(float, "CiliaryBodyBaseCurvature")
-    height: float = rayocular_field(validators.positive_float, "CiliaryBodyHeight")
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "CiliaryBodyLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(
+    base_curvature: RayOcularField[float] = RayOcularField(float, "CiliaryBodyBaseCurvature")
+    height: RayOcularField[float] = RayOcularField(validators.positive_float, "CiliaryBodyHeight")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "CiliaryBodyLocalRotation"
+    )
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
         validators.vector3(validators.positive_float), "CiliaryBodyLocalScale"
     )
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "CiliaryBodyLocalTranslation")
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "CiliaryBodyLocalTranslation"
+    )
 
 
 @dataclass
 class Cornea(BaseModel):
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "CorneaLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(validators.vector3(validators.positive_float), "CorneaLocalScale")
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "CorneaLocalTranslation")
-    semi_axis: Vector3[float] = rayocular_field(validators.vector3(float), "CorneaSemiAxis")
-    thickness: float = rayocular_field(validators.positive_float, "CorneaThickness")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "CorneaLocalRotation")
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(validators.positive_float), "CorneaLocalScale"
+    )
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "CorneaLocalTranslation"
+    )
+    semi_axis: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "CorneaSemiAxis")
+    thickness: RayOcularField[float] = RayOcularField(validators.positive_float, "CorneaThickness")
 
 
 @dataclass
 class Eye(BaseModel):
-    pivot: Vector3[float] = rayocular_field(validators.vector3(float), "EyePivot")
-    rotation: Vector3[float] = rayocular_field(validators.vector3(float), "EyeRotation")
-    scale: Vector3[float] = rayocular_field(validators.vector3(validators.positive_float), "EyeScale")
-    translation: Vector3[float] = rayocular_field(validators.vector3(float), "EyeTranslation")
+    pivot: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "EyePivot")
+    rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "EyeRotation")
+    scale: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(validators.positive_float), "EyeScale")
+    translation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "EyeTranslation")
 
 
 @dataclass
 class Iris(BaseModel):
-    inner_semi_axis: Vector3[float] = rayocular_field(validators.vector3(float), "IrisInnerSemiAxis")
-    outer_semi_axis: Vector3[float] = rayocular_field(validators.vector3(float), "IrisOuterSemiAxis")
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "IrisLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(validators.vector3(validators.positive_float), "IrisLocalScale")
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "IrisLocalTranslation")
-    thickness: float = rayocular_field(validators.positive_float, "IrisThickness")
+    inner_semi_axis: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "IrisInnerSemiAxis")
+    outer_semi_axis: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "IrisOuterSemiAxis")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "IrisLocalRotation")
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(validators.positive_float), "IrisLocalScale"
+    )
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "IrisLocalTranslation"
+    )
+    thickness: RayOcularField[float] = RayOcularField(validators.positive_float, "IrisThickness")
 
 
 @dataclass
 class Lens(BaseModel):
-    curvature: float = rayocular_field(float, "LensCurvature")
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "LensLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(validators.vector3(validators.positive_float), "LensLocalScale")
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "LensLocalTranslation")
-    semi_axis: Vector3[float] = rayocular_field(validators.vector3(float), "LensSemiAxis")
+    curvature: RayOcularField[float] = RayOcularField(float, "LensCurvature")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "LensLocalRotation")
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(validators.positive_float), "LensLocalScale"
+    )
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "LensLocalTranslation"
+    )
+    semi_axis: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "LensSemiAxis")
 
 
 @dataclass
 class Macula(BaseModel):
-    height: float = rayocular_field(validators.positive_float, "MaculaHeight")
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "MaculaLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(validators.vector3(validators.positive_float), "MaculaLocalScale")
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "MaculaLocalTranslation")
-    rotation: Vector3[float] = rayocular_field(validators.vector3(float), "MaculaRotation")
-    semi_axis: Vector3[float] = rayocular_field(validators.vector3(float), "MaculaSemiAxis")
+    height: RayOcularField[float] = RayOcularField(validators.positive_float, "MaculaHeight")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "MaculaLocalRotation")
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(validators.positive_float), "MaculaLocalScale"
+    )
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "MaculaLocalTranslation"
+    )
+    rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "MaculaRotation")
+    semi_axis: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "MaculaSemiAxis")
 
 
 @dataclass
 class OpticalDisc(BaseModel):
-    height: float = rayocular_field(validators.positive_float, "OpticalDiscHeight")
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "OpticalDiscLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(
+    height: RayOcularField[float] = RayOcularField(validators.positive_float, "OpticalDiscHeight")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "OpticalDiscLocalRotation"
+    )
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
         validators.vector3(validators.positive_float), "OpticalDiscLocalScale"
     )
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "OpticalDiscLocalTranslation")
-    semi_axis: Vector3[float] = rayocular_field(validators.vector3(float), "OpticalDiscSemiAxis")
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "OpticalDiscLocalTranslation"
+    )
+    semi_axis: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "OpticalDiscSemiAxis")
 
 
 @dataclass
 class OpticalNerve(BaseModel):
-    height: float = rayocular_field(validators.positive_float, "OpticalNerveHeight")
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "OpticalNerveLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(
+    height: RayOcularField[float] = RayOcularField(validators.positive_float, "OpticalNerveHeight")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "OpticalNerveLocalRotation"
+    )
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
         validators.vector3(validators.positive_float), "OpticalNerveLocalScale"
     )
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "OpticalNerveLocalTranslation")
-    rotation: Vector3[float] = rayocular_field(validators.vector3(float), "OpticalNerveRotation")
-    semi_axis: Vector3[float] = rayocular_field(validators.vector3(float), "OpticalNerveSemiAxis")
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "OpticalNerveLocalTranslation"
+    )
+    rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "OpticalNerveRotation")
+    semi_axis: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "OpticalNerveSemiAxis")
 
 
 @dataclass
 class Retina(BaseModel):
-    thickness: float = rayocular_field(validators.positive_float, "RetinaThickness")
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "RetinaLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(validators.vector3(validators.positive_float), "RetinaLocalScale")
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "RetinaLocalTranslation")
+    thickness: RayOcularField[float] = RayOcularField(validators.positive_float, "RetinaThickness")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "RetinaLocalRotation")
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(validators.positive_float), "RetinaLocalScale"
+    )
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "RetinaLocalTranslation"
+    )
 
 
 @dataclass
 class Sclera(BaseModel):
-    thickness: float = rayocular_field(validators.positive_float, "ScleraThickness")
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "ScleraLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(validators.vector3(validators.positive_float), "ScleraLocalScale")
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "ScleraLocalTranslation")
-    semi_axis: Vector3[float] = rayocular_field(validators.vector3(float), "ScleraSemiAxis")
+    thickness: RayOcularField[float] = RayOcularField(validators.positive_float, "ScleraThickness")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "ScleraLocalRotation")
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(validators.positive_float), "ScleraLocalScale"
+    )
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "ScleraLocalTranslation"
+    )
+    semi_axis: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "ScleraSemiAxis")
 
 
 @dataclass
 class VitreousBody(BaseModel):
-    local_rotation: Vector3[float] = rayocular_field(validators.vector3(float), "VitreousBodyLocalRotation")
-    local_scale: Vector3[float] = rayocular_field(
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "VitreousBodyLocalRotation"
+    )
+    local_scale: RayOcularField[Vector3[float]] = RayOcularField(
         validators.vector3(validators.positive_float), "VitreousBodyLocalScale"
     )
-    local_translation: Vector3[float] = rayocular_field(validators.vector3(float), "VitreousBodyLocalTranslation")
+    local_translation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "VitreousBodyLocalTranslation"
+    )
 
 
 @dataclass
-class EyeModelParameters:
-    eye: Eye = rayocular_field(validators.dataclass(Eye))
-    anterior_chamber: AnteriorChamber = rayocular_field(validators.dataclass(AnteriorChamber))
-    ciliary_body: CiliaryBody = rayocular_field(validators.dataclass(CiliaryBody))
-    cornea: Cornea = rayocular_field(validators.dataclass(Cornea))
-    iris: Iris = rayocular_field(validators.dataclass(Iris))
-    lens: Lens = rayocular_field(validators.dataclass(Lens))
-    macula: Macula = rayocular_field(validators.dataclass(Macula))
-    optical_disc: OpticalDisc = rayocular_field(validators.dataclass(OpticalDisc))
-    optical_nerve: OpticalNerve = rayocular_field(validators.dataclass(OpticalNerve))
-    retina: Retina = rayocular_field(validators.dataclass(Retina))
-    sclera: Sclera = rayocular_field(validators.dataclass(Sclera))
-    vitreous_body: VitreousBody = rayocular_field(validators.dataclass(VitreousBody))
+class EyeModelParameters(BaseModel):
+    eye: ValidatedField[Eye] = ValidatedField(validators.dataclass(Eye))
+    anterior_chamber: ValidatedField[AnteriorChamber] = ValidatedField(validators.dataclass(AnteriorChamber))
+    ciliary_body: ValidatedField[CiliaryBody] = ValidatedField(validators.dataclass(CiliaryBody))
+    cornea: ValidatedField[Cornea] = ValidatedField(validators.dataclass(Cornea))
+    iris: ValidatedField[Iris] = ValidatedField(validators.dataclass(Iris))
+    lens: ValidatedField[Lens] = ValidatedField(validators.dataclass(Lens))
+    macula: ValidatedField[Macula] = ValidatedField(validators.dataclass(Macula))
+    optical_disc: ValidatedField[OpticalDisc] = ValidatedField(validators.dataclass(OpticalDisc))
+    optical_nerve: ValidatedField[OpticalNerve] = ValidatedField(validators.dataclass(OpticalNerve))
+    retina: ValidatedField[Retina] = ValidatedField(validators.dataclass(Retina))
+    sclera: ValidatedField[Sclera] = ValidatedField(validators.dataclass(Sclera))
+    vitreous_body: ValidatedField[VitreousBody] = ValidatedField(validators.dataclass(VitreousBody))
 
-    lens_cornea_distance: float = rayocular_field(validators.positive_float)
-    level_of_detail: int = rayocular_field(int)
+    lens_cornea_distance: ValidatedField[float] = ValidatedField(validators.positive_float)
+    level_of_detail: ValidatedField[int] = ValidatedField(int)
 
     @classmethod
     def from_rayocular(cls, parameters) -> EyeModelParameters:
@@ -275,10 +392,20 @@ class EyeModelParameters:
         }
 
 
+EyeLaterality = Literal["Left", "Right"]
+
+
 @dataclass
-class EyeModel:
-    measurements: EyeModelMeasurements = rayocular_field(validators.dataclass(EyeModelMeasurements))
-    parameters: EyeModelParameters = rayocular_field(validators.dataclass(EyeModelParameters))
+class EyeModel(BaseModel):
+    measurements: ValidatedField[EyeModelMeasurements] = ValidatedField(validators.dataclass(EyeModelMeasurements))
+    parameters: ValidatedField[EyeModelParameters] = ValidatedField(validators.dataclass(EyeModelParameters))
+    laterality: RayOcularField[EyeLaterality] = RayOcularField(validators.literal(EyeLaterality), "Laterality")
+
+    description: RayOcularField[str] = RayOcularField(str, "Description", default="")
+    inter_pupillary_distance: RayOcularField[Optional[float]] = RayOcularField(
+        validators.optional(validators.positive_float), "InterPupillaryDistance", default=None
+    )
+    name: RayOcularField[str] = RayOcularField(str, "Name", default="Eye Model")
 
     @classmethod
     def from_rayocular(cls, geometry_generator) -> EyeModel:
@@ -286,6 +413,24 @@ class EyeModel:
         parameters = geometry_generator.EyeModelParameters
 
         return cls(
+            description=geometry_generator.Description,
+            inter_pupillary_distance=geometry_generator.InterPupillaryDistance,
+            laterality=geometry_generator.Laterality,
+            name=geometry_generator.Name,
             measurements=EyeModelMeasurements.from_rayocular(measurements),
             parameters=EyeModelParameters.from_rayocular(parameters),
         )
+
+    def to_rayocular(self) -> dict[str, Any]:
+        raise NotImplementedError("to_rayocular is not implemented for EyeModel.")
+
+    @classmethod
+    def load_json(cls, file_path: PathLike | str) -> EyeModel:
+        file_path = Path(file_path)
+        data = json.loads(file_path.read_text(encoding="utf-8"))
+
+        return cls.from_dict(data)
+
+    def save_json(self, file_path: PathLike | str) -> None:
+        file_path = Path(file_path)
+        file_path.write_text(json.dumps(self.to_dict(), indent=4), encoding="utf-8")
