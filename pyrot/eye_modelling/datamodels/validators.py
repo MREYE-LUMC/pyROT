@@ -29,6 +29,10 @@ class RayOcularField(Generic[Instance, Value]):
     ----------
     validator : Callable[[Any], Value]
         A callable object that performs the validation.
+    name: str | None
+        The RayOcular name of the field. This is used for serialization and deserialization to RayOcular.
+    default: Value, optional
+        The default value for the field. If not provided, the field will be required and must be set explicitly.
 
     Attributes
     ----------
@@ -67,15 +71,19 @@ class RayOcularField(Generic[Instance, Value]):
     ...         self.age = age
     """
 
-    def __init__(self, validator: Callable[[Any], Value], name: str | None) -> None:
+    def __init__(self, validator: Callable[[Any], Value], name: str | None, *, default: Value = ...) -> None:
         self.rayocular_name = name
         self.validator = validator
+        self._default = default
 
     def __set_name__(self, owner: Instance, name: str):
         self.public_name = name
         self.private_name = "_" + name
 
     def __get__(self, instance: Instance, owner: type[Instance] | None = None) -> Value:
+        if instance is None and self._default is not ...:
+            return self._default
+
         return getattr(instance, self.private_name)
 
     def __set__(self, instance: Instance, value: Value):
@@ -107,22 +115,24 @@ class RayOcularField(Generic[Instance, Value]):
 
 # Factory function to create a validated field.
 # This is needed to make type checkers accept validated fields for type-annotated fields.
-def rayocular_field(validator: Callable[[Any], Value], name: str | None = None) -> Value:
+def rayocular_field(validator: Callable[[Any], Value], name: str | None = None, *, default: Value = ...) -> Value:
     """Creates a validated field with the given validator.
 
     Parameters
     ----------
-    name : str
-        The RayOcular name of the field.
     validator : Callable[[Any], Value]
         A callable object that takes any value as input and returns a validated value.
+    name : str | None
+        The RayOcular name of the field.
+    default : Value, optional
+        The default value for the field. If not provided, the field will be required and must be set explicitly.
 
     Returns
     -------
     ValidatedField[Instance, Value]
         The validated field.
     """
-    return RayOcularField(validator, name)  # type: ignore
+    return RayOcularField(validator, name, default=default)  # type: ignore
 
 
 def dataclass(cls: type[Value]) -> Callable[..., Value]:

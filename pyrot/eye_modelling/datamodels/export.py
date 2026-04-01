@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import logging
 import re
-from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 from shutil import copy
@@ -194,8 +193,7 @@ def export_eye_model(structure_set, output_directory: Path, eyemodelnr: int):
 
     eye_model = EyeModel.from_rayocular(structure_set.GeometryGenerators[eyemodelnr])
 
-    with open(output_directory / f"eye_model_{eyemodelnr}.json", "w", encoding="utf-8") as f:
-        json.dump(asdict(eye_model), f, indent=4)
+    eye_model.save_json(output_directory / f"eye_model_{eyemodelnr}.json")
 
 
 def export_pois(structure_set, output_directory: Path, examination_name: str):
