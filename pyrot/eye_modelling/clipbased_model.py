@@ -397,7 +397,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
     params : array-like, shape (3,)
         The center coordinates (x0, y0, z0) to which the clip data should be translated.
     clip_data : ndarray, shape (N, 3)
-        The 3D coordinates of the clip points.
+        The 3D coordinates of the clip POIs.
     optic_nerve_data : tuple of array-like
         Tuple containing (on_model_loc, on_image_loc), where:
             on_model_loc : array-like, shape (3,)
