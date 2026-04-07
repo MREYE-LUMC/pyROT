@@ -189,7 +189,7 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
     ([0, 0, 0]) with input angles [0, 0, 0] and sclera radii of [1, 1, 1]. This is necessary as the method where
     rotation is fitted, relies on a methodology where all pois are translated to the unity circle.
     Currently, only the "unity_circle_standard_model" method is implemented, which assumes the optic disk location
-    within the eye model used RayOcular's default value.
+    within the eye model using RayOcular's default values.
 
     Parameters
     ----------
