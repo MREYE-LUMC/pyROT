@@ -478,7 +478,7 @@ def calc_ellipsoid_registration_with_calculated_rotation(
     eye_translation_in,
     initial_guess=None,
 ):
-    """Registers an ellipsoid model to clip data using least squares optimization,
+    """Registers an ellipsoid model to clip POIs using least squares optimization,
     incorporating calculated eye rotation and translation. Rotation is based purely on the
     location of the optic disk, while translation is based on the clip location. For each
     evaluated center translation, the corresponding rotation is calculated and thereafter,
