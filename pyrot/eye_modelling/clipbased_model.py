@@ -560,7 +560,7 @@ def calc_roll_and_pitch_of_shifted_eyemodel(
 
     Notes
     -----
-    Coordinates are assumed to be in the (x, y, z) or (rl, ap, is) convention.
+    Coordinates are assumed to be in the (x, y, z) or (RL, AP, IS) convention.
     The function corrects for translational shifts before calculating the required rotations.
     """
     # calculate the new location of the vitreous body, and on model
