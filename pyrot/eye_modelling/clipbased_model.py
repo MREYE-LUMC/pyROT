@@ -162,7 +162,7 @@ def match_ellipse_with_pois(
             initial_guess=eye_translation_input,
         )
 
-        # calculate the corresponding rotation (this is also calculated in the residuals function but is exported)
+        # calculate the corresponding rotation (this is also calculated in the residuals function but is not exported)
         roll_angle_deg, pitch_angle_deg = calc_roll_and_pitch_of_shifted_eyemodel(
             vitreous_model_loc_patient,
             axes,
