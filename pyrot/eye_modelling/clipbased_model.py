@@ -172,7 +172,7 @@ def match_ellipse_with_pois(
             eye_translation_output,
         )
 
-        # determine dict to update eye model
+        # define the dict to update eye model
         new_values = {}
         new_values["EyeTranslation"] = eye_translation_output
         new_values["EyeRotation"] = np.asarray(
