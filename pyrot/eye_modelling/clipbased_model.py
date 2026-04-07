@@ -393,7 +393,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
     Parameters
     ----------
     params : array-like, shape (3,)
-        The center coordinates (x0, y0, z0) to which the clip data should be translated.
+        The center coordinates (x0, y0, z0) of the eye model that should be translated so that the clip-clip distance is minimal.
     clip_data : ndarray, shape (N, 3)
         The 3D coordinates of the clip POIs.
     optic_nerve_data : tuple of array-like
@@ -405,7 +405,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
     axes : array-like, shape (3,)
         The ellipsoid axes lengths (rl_axis, is_axis, ap_axis).
     vitreous_body_center : array-like, shape (3,)
-        The center of the vitreous body in the model.
+        The center of the vitreous body in the image space.
     eye_rotation_in : dict
         Dictionary containing the current eye rotation angles in degrees, with keys "x" and "z" ("y"  is not used and should be set to 0).
     eye_translation_input : array-like, shape (3,)
