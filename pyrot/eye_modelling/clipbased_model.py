@@ -150,7 +150,7 @@ def match_ellipse_with_pois(
         new_values["EyeRotation"] = eye_rotation_output
 
     elif rotation_method == "fixed_gaze":
-        # fit the best location for the ellipsoid to minimize distance from POIs, and base rotation on the optic disk poi
+        # fit the best center location for the ellipsoid to minimize distance from  clip POIs, and determine the corresponding rotation based on the optic disk poi
         eye_translation_output = calc_ellipsoid_registration_with_calculated_rotation(
             markers_in_patient,
             on_model_loc_patient,
