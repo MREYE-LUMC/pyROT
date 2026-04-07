@@ -529,7 +529,8 @@ def calc_ellipsoid_registration_with_calculated_rotation(
 def calc_roll_and_pitch_of_shifted_eyemodel(
     retina_center_location, axes, on_model_loc, on_image_loc, eye_translation_before_shift, eye_translation_after_shift
 ):
-    """Calculates the roll and pitch angles required to align a shifted eye model with the specified optic disc positions.
+    """Calculates the roll and pitch angles required to align a shifted eye model with the specified optic disc
+    positions.
     This function computes the roll and pitch corrections for an eye model after a translational shift, based on the
     locations of the retina center, retina axes, optic disc model center, and the optic disc point of interest (POI) as
     clicked on the MRI image.
