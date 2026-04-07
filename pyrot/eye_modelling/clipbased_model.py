@@ -144,7 +144,7 @@ def match_ellipse_with_pois(
             initial_guess=[*eye_translation_input, 0, 0, 0],
         )
 
-        # determine dict to update eye model
+        # defines the dict to update eye model
         new_values = {}
         new_values["EyeTranslation"] = eye_translation_output
         new_values["EyeRotation"] = eye_rotation_output
