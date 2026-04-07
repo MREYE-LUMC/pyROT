@@ -362,7 +362,7 @@ def calc_ellipsoid_registration_with_fitted_rotation(clip_data, on_model_loc, on
     -----
     - This function relies on `calc_residuals_for_registration_with_fitted_rotation` for computing
     the residuals and uses `scipy.optimize.least_squares` for optimization.
-    - The y rotation is set to 0
+    - The y rotation is fixed to 0
     """
     logger.debug("Starting calc_ellipsoid_registration function")
 
