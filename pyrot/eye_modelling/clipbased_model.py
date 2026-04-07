@@ -1,6 +1,6 @@
 """Clip-based registration of the eye model to image and marker data.
 
-This module provides functions to align an eye model to patient-specific data
+This module provides functions to register an eye model to
 using scleral clip positions and optic nerve/disk-related points of interest.
 """
 
