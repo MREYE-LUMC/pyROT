@@ -487,7 +487,7 @@ def calc_ellipsoid_registration_with_calculated_rotation(
     Parameters
     ----------
     clip_data : np.ndarray
-        Array of 3D points representing the clip data to be registered.
+        Array of 3D points representing the clip POIs to which the eye model is registered.
     on_model_loc : np.ndarray
         3D coordinates of the optic disk model center.
     on_image_loc : np.ndarray
