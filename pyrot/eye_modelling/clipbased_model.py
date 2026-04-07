@@ -259,7 +259,7 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
 
 
 def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, optic_nerve_data, axes):
-    """Calculate residuals for registration of ellipsoid model with fitted rotation.
+    """Calculate residuals for registration of ellipsoid model with set rotation.
     This function computes the residuals between a set of 3D points (clip_data) and a rotated, translated ellipsoid
     model,
     as well as the normalized squared distance between the predicted and observed optic nerve (ON) locations.
