@@ -122,7 +122,7 @@ def match_ellipse_with_pois(
 
         # the item that comes from load_rois is a list, get the first item on that list (and give a warning if the list has length >1)
         if len(vitreous_model) > 1:
-            logger.warning("Multiple vitreous body models found, taking the first one")
+            logger.warning("Multiple vitreous body ROIs found, taking the first one")
 
         vitreous_model = vitreous_model[0]
 
