@@ -390,7 +390,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
     This function translates the clip data according to the provided center parameters, computes
     the necessary rotation to align the model with the observed optic nerve location, applies
     the rotation, and then calculates the residuals (distance to the ellipsoid surface) for each
-    clip point.
+    clip POI.
 
     Parameters
     ----------
