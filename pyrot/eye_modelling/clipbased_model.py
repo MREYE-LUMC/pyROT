@@ -440,7 +440,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
     roll_angle_deg = eye_rotation_in["z"] + roll_angle_deg
     pitch_angle_deg = eye_rotation_in["x"] + pitch_angle_deg
 
-    # refactor into euler angles, y-axis angle (roll) to zero
+    # refactor into euler angles, keeping y-axis angle (roll) to zero
     euler_angles = np.array([-pitch_angle_deg, 0, -roll_angle_deg])
     logger.debug("euler_angles: %s", euler_angles)
 
