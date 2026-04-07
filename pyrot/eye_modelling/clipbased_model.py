@@ -217,8 +217,6 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
     - The function assumes the optic disk location has not been manually changed within the eye model.
     - Validation and additional testing for different eye models are recommended (see TODOs in code).
     """
-    # TODO: validate this method further with multiple different types of eye models
-    # TODO: add testing method for this methodology
 
     logger.debug("Starting calc_on_model_loc_patient function")
 
