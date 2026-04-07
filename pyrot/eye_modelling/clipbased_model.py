@@ -110,7 +110,7 @@ def match_ellipse_with_pois(
 
         # the item that comes from load_rois is a list, get the first item on that list (and give a warning if the list has length >1)
         if len(on_model) > 1:
-            logger.warning("Multiple optic disk models found, taking the first one")
+            logger.warning("Multiple optic disk ROIs found, taking the first one")
 
         on_model = on_model[0]
 
