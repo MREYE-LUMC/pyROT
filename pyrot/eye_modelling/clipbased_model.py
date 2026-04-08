@@ -393,7 +393,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
     Parameters
     ----------
     params : array-like, shape (3,)
-        The center coordinates (x0, y0, z0) of the eye model that should be translated so that the clip-clip distance is minimal.
+        The center coordinates (x0, y0, z0) of the eye model in image space
     clip_data : ndarray, shape (N, 3)
         The 3D coordinates of the clip POIs.
     optic_nerve_data : tuple of array-like
