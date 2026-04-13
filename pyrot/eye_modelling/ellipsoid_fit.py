@@ -43,7 +43,7 @@ def ellipsoid_fit(
 
     Notes
     -----
-    It does not find exactly the best fitting ellipse (see van Vught et al.).
+    It does not find the exact best-fitting ellipse (see van Vught et al.).
     """
 
     # Based on a script by:

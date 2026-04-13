@@ -182,15 +182,15 @@ def match_eye_model(
     eye_model_generators: object, eye_model_parameters: object, biometry_data: dict, cornea_type: str
 ) -> None:
     """Match the eye model parameters with the provided biometry data.
-    Make the iris outerradius such that the vitreous length is correct
-    and subsequently make the cornea radii such that the AD is correct.
+    Set the iris outer radius so that the vitreous length is correct,
+    then set the cornea radii so that the AD is correct.
 
     Parameters
     ----------
-    eye_model : object
+    eye_model_generators : object
         The eye model object from RayOcular.
     eye_model_parameters : object
-        An object containing specific eye model parameters
+        An object containing specific eye model parameters.
     biometry_data : dict
         Dictionary containing biometry measurements.
     cornea_type : str

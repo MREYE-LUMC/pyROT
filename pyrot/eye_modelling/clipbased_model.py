@@ -28,10 +28,10 @@ def match_ellipse_with_pois(
     poi_type_on,
     rotation_method,
 ):
-    """Registers the eye model to to the clip locations (on the sclera) and optic disk location.
+    """Registers the eye model to the clip locations (on the sclera) and optic disk location.
     Rotation of the eye model is either determined by minimizing the distance to the optic disk POI, or by rotating the
     model such that the visual axis goes through the eye center and optic disk POI.
-    In the first case the eye center and rotation are fit parameters, while in  latter case the eye center is the only
+    In the first case, the eye center and rotation are fit parameters, while in the latter case the eye center is the only
     fitting parameter.
 
     Parameters
@@ -49,7 +49,7 @@ def match_ellipse_with_pois(
     poi_type_on : str
         The type of POI representing the optic disk location.
     rotation_method : str
-        Method to determine rotation, either "minimize_distance" (fit rotation to minimize optic disk poi - optic disk center distance) or "fixed_gaze" (calculate rotation based on the location of the optic disk POI).
+        Method to determine rotation, either "minimize_distance" (fit rotation to minimize optic disk POI - optic disk center distance) or "fixed_gaze" (calculate rotation based on the location of the optic disk POI).
 
     Raises
     ------
@@ -185,9 +185,9 @@ def match_ellipse_with_pois(
 
 
 def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_model_loc_method):
-    """Determines the location of the optic disk for an  eye model that is positioned at the origin
+    """Determines the location of the optic disk for an eye model that is positioned at the origin
     ([0, 0, 0]) with input angles [0, 0, 0] and sclera radii of [1, 1, 1]. This is necessary as the method where
-    rotation is fitted, relies on a methodology where all pois are translated to the unity circle.
+    rotation is fitted relies on a methodology where all POIs are translated to the unity circle.
     Currently, only the "unity_circle_standard_model" method is implemented, which assumes the optic disk location
     within the eye model using RayOcular's default values.
 
@@ -257,9 +257,8 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
 
 
 def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, optic_nerve_data, axes):
-    """Calculate residuals for registration of ellipsoid model with set rotation.
-    This function computes the residuals between a set of 3D points (clip_data) and a rotated, translated ellipsoid
-    model,
+    """Calculate residuals for registration of an ellipsoid model with a fixed rotation.
+    This function computes the residuals between a set of 3D points (`clip_data`) and a rotated, translated ellipsoid model,
     as well as the normalized squared distance between the predicted and observed optic nerve (ON) locations.
 
     Parameters
@@ -360,7 +359,7 @@ def calc_ellipsoid_registration_with_fitted_rotation(clip_data, on_model_loc, on
     -----
     - This function relies on `calc_residuals_for_registration_with_fitted_rotation` for computing
     the residuals and uses `scipy.optimize.least_squares` for optimization.
-    - The y rotation is fixed to 0
+    - The y-axis rotation is fixed to 0.
     """
     logger.debug("Starting calc_ellipsoid_registration function")
 

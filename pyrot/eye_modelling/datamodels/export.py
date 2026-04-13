@@ -216,7 +216,7 @@ def export_pois(structure_set, output_directory: Path, examination_name: str):
     Notes
     -----
     The output JSON file will contain a dictionary where each key is the POI name and the value is a dictionary
-    with the POI's location, type, and associated examination name.
+    with the POI location, type, and associated examination name.
     """
 
     poi_gmtrs = list(structure_set.PoiGeometries)

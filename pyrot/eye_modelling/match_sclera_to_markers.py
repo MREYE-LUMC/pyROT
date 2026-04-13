@@ -34,13 +34,13 @@ def match_sclera_to_markers(
     eye_model_generators : object
         The eye model containing eye parameters.
     eye_model_parameters : object
-        An object with only specific eye model parameters
+        An object containing only specific eye model parameters.
     eye_shape : str
         The shape of the eye model. Options are "sphere", "EYEPLAN", "ellipsoid", "ellipsoid_fixedCenter".
         "sphere" returns a sphere
         "EYEPLAN" returns an ellipsoid with the same radii in IS and LR directions
         "ellipsoid" returns an ellipsoid
-        "ellipsoid_fixedCenter" returns an ellipsoid but uses use a predefined shift in ellipsoid center location
+        "ellipsoid_fixedCenter" returns an ellipsoid but uses a predefined shift in ellipsoid center location
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
         "clips" means the location of the clips, which are sutured on the sclera
@@ -131,19 +131,19 @@ def calc_sclera_center_to_match_white_to_white(
     n_evaluations: int = 31,
 ) -> float:
     """Calculate the ellipsoid center location so it matches the WTW-width at vitreous depth.
-    This is to ensure the models limbus diameter matches the measured limbus diameter/ White To White,
-    without compromising on correctness of anterior chamber biometry.
+    This is to ensure the model's limbus diameter matches the measured limbus diameter / white-to-white,
+    without compromising the correctness of anterior chamber biometry.
 
     Uses linear interpolation to find this center translation.
-    By default calculates one sample per .1 mm to account for the nonlinearity of the limbus diameter and center translation relation.
-    Using less samples with a quadratic interpolation using e.g. scipy would be more efficient/ elegant, but this is not possible in some (clinical) RayOcular scripting environments.
+    By default, it calculates one sample per 0.1 mm to account for the nonlinearity of the limbus diameter and center translation relation.
+    Using fewer samples with quadratic interpolation (for example with scipy) would be more efficient and more elegant, but this is not possible in some clinical RayOcular scripting environments.
 
     Parameters
     ----------
     structure_set : object
         The structure set containing the POI geometries.
     eye_model_parameters : object
-        An object containing only specific eye model parameters
+        An object containing only specific eye model parameters.
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
     biometry_data : dict
@@ -226,14 +226,14 @@ def calc_sclera_center_to_match_white_to_white(
 def calc_sclera_ellipse_for_center(
     structure_set: object, eye_model_parameters: object, marker_location: str, center_translations: list
 ) -> list:
-    """Returns best fitting sclera ellipse radii to marker locations for one or an array of ellipse center locations.
+    """Returns the best-fitting sclera ellipse radii for marker locations and one or an array of ellipse center locations.
 
     Parameters
     ----------
     structure_set : object
         The structure set containing the POI geometries.
     eye_model_parameters : object
-        The eye model object containing only eye parameters
+        The eye model object containing only specific eye parameters.
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
     center_translations : list
@@ -316,12 +316,12 @@ def calc_sclera_ellipse_for_center(
 
 
 def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list: list) -> float or list:
-    """Determines limbus half-axes of one or an array of sclera ellipses so it matches the vitreous depth.
+    """Determines limbus half-axes for one or an array of sclera ellipses so they match the vitreous depth.
 
     Parameters
     ----------
     eye_model_parameters : object
-        An object containing only specific eye parameters
+        An object containing only specific eye parameters.
     biometry_data : dict
         The biometry data containing measurements like 'AL', 'AD', and 'AD_offset'.
     radii_list : list
