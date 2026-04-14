@@ -73,7 +73,7 @@ def match_ellipse_with_pois(
     poi_geometries = ro_interface.load_pois(structure_set, poi_type=poi_type_clips)
     markers_in_patient = [np.array([pg.Point["x"], pg.Point["y"], pg.Point["z"]]) for pg in poi_geometries]
 
-    # find the POI clicked at the location of the OD on the MRI-image.
+    # find the POI clicked at the location of the OD on the MRI image.
     # make sure there is exactly one of the designated POI type
     on_image_loc_list = ro_interface.load_pois(structure_set, poi_type=poi_type_on)
     if len(on_image_loc_list) != 1:
@@ -81,10 +81,10 @@ def match_ellipse_with_pois(
     on_image_loc = on_image_loc_list[0]
     on_image_loc_patient = np.array([on_image_loc.Point["x"], on_image_loc.Point["y"], on_image_loc.Point["z"]])
 
-    # radii of the ellipse to be fitted to the POI's
+    # radii of the ellipse to be fitted to the POIs
     if input_ellipse == "sclera_radii":
         sclera_radii = eye_model_parameters.ScleraSemiAxis
-        # note that the pois are clicked at the center of the clips, which means we should add 0.5 * clip_thickness to obtain the effective sclera radii at the POI locations
+        # note that the POIs are clicked at the center of the clips, which means we should add 0.5 * clip_thickness to obtain the effective sclera radii at the POI locations
         clip_thickness = Config.CLIP_THICKNESS
         axes = (
             sclera_radii["x"] + (0.5 * clip_thickness),
@@ -96,7 +96,7 @@ def match_ellipse_with_pois(
 
     # determinations/ imports that are specific to one rotation method
 
-    # get the location of the optic nerve in the model, either by getting the location on the unity circle (if rotation_method == fit) or the actual location (if rotation_method == calculate)
+    # get the location of the optic nerve in the model, either by getting the location on the unity circle (if rotation_method == 'minimize_distance') or the actual location (if rotation_method == 'fixed_gaze')
     if rotation_method == "minimize_distance":
         on_model_loc_patient = calc_on_model_loc_patient(
             eye_model_generators, eye_model_parameters, "unity_circle_standard_model"
@@ -144,13 +144,13 @@ def match_ellipse_with_pois(
             initial_guess=[*eye_translation_input, 0, 0, 0],
         )
 
-        # defines the dict to update eye model
+        # define the dict to update eye model
         new_values = {}
         new_values["EyeTranslation"] = eye_translation_output
         new_values["EyeRotation"] = eye_rotation_output
 
     elif rotation_method == "fixed_gaze":
-        # fit the best center location for the ellipsoid to minimize distance from  clip POIs, and determine the corresponding rotation based on the optic disk poi
+        # fit the best center location for the ellipsoid to minimize distance from clip POIs, and determine the corresponding rotation based on the optic disk POI
         eye_translation_output = calc_ellipsoid_registration_with_calculated_rotation(
             markers_in_patient,
             on_model_loc_patient,
@@ -221,7 +221,7 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
     logger.debug("Starting calc_on_model_loc_patient function")
 
     if on_model_loc_method == "unity_circle_standard_model":
-        # get the eyes laterality, as the location on the unity circle depends on the laterality.
+        # get the eye's laterality, as the location on the unity circle depends on the laterality.
         laterality = geometry_generators.Laterality
 
         # Check if the optic disk within the eye model was not shifted. This shift is denoted by the optic nerve rotation.
@@ -437,7 +437,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
     roll_angle_deg = eye_rotation_in["z"] + roll_angle_deg
     pitch_angle_deg = eye_rotation_in["x"] + pitch_angle_deg
 
-    # refactor into euler angles, keeping y-axis angle (roll) to zero
+    # refactor into Euler angles, keeping y-axis angle (roll) to zero
     euler_angles = np.array([-pitch_angle_deg, 0, -roll_angle_deg])
     logger.debug("euler_angles: %s", euler_angles)
 

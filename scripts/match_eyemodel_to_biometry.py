@@ -54,7 +54,7 @@ eye_model_generators, eye_model_parameters = ro_interface.load_eyemodel(structur
 # fit the eye model
 logger.debug("start fitting eye model")
 
-# do an full ellipsoid fit on eye model, so we know the vitreous center and length(these are necessary for determine_center_translation_based_on_WTW())
+# do a full ellipsoid fit on eye model, so we know the vitreous center and length(these are necessary for determine_center_translation_based_on_WTW())
 logger.debug("do an full ellipsoid fit, so we know the vitreous center and length")
 match_sclera_to_markers.match_sclera_to_markers(
     structure_set, eye_model_generators, eye_model_parameters, "ellipsoid", marker_location
