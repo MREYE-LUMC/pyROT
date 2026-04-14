@@ -13,7 +13,7 @@ from pyrot.config import Config
 logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler(sys.stdout)], force=True)
 logger = logging.getLogger(__name__)
 
-logger.debug("importing patient data and local varialbes")
+logger.debug("importing patient data and local variables")
 
 # user input
 based_on = "optic_disk"  # choose what to base the eye rotation on

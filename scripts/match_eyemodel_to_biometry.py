@@ -132,7 +132,7 @@ else:
         'WARNING: script not run. Please input "ellipse_fit", "axial_length_based" or "white_to_white_based" for scleralcenter'
     )
 
-logger.debug("commence setting onaxis distances")
+logger.debug("commence setting on-axis distances")
 match_with_biometry.match_eye_model(eye_model_generators, eye_model_parameters, biometry_data, cornea_type=cornea_type)
-logger.debug("setting onaxis distances completed")
+logger.debug("setting on-axis distances completed")
 logger.debug("fitting eye model completed")

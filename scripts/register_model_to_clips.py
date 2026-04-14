@@ -30,7 +30,7 @@ rotation_method = "fixed_gaze"  # 'minimize_distance' (both the eye translation 
 structure_set = ro_interface.load_current_structureset()
 eye_model_generators, eye_model_parameters = ro_interface.load_eyemodel(structure_set, eyemodelnr)
 
-logger.debug("commencing clip based model fit")
+logger.debug("commencing clip-based model fit")
 clipbased_model.match_ellipse_with_pois(
     eye_model_generators,
     eye_model_parameters,
@@ -40,4 +40,4 @@ clipbased_model.match_ellipse_with_pois(
     poi_type_on,
     rotation_method,
 )
-logger.debug("clip based model fit completed")
+logger.debug("clip-based model fit completed")
