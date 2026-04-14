@@ -45,7 +45,7 @@ class Config:
     """The unit in which ROIs are exported."""
 
     ROI_EXPORT_ROI_SUFFIX: str | None = None
-    """The suffix appended to the ROI name for exported ROIs.
+    """The suffix in the ROI name of the ROIs that need to be exported (for filtering).
 
     By default, there is no suffix in RayOcular.
     In patients with multiple eye models or when ROI names have been manually altered, a suffix may be present.
