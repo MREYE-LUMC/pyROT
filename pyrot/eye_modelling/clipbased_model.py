@@ -31,7 +31,8 @@ def match_ellipse_with_pois(
     """Registers the eye model to the clip locations (on the sclera) and optic disk location.
     Rotation of the eye model is either determined by minimizing the distance to the optic disk POI, or by rotating the
     model such that the visual axis goes through the eye center and optic disk POI.
-    In the first case, the eye center and rotation are fit parameters, while in the latter case the eye center is the only
+    In the first case, the eye center and rotation are fit parameters, while in the latter case the eye center is the
+    only
     fitting parameter.
 
     Parameters
@@ -258,7 +259,8 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
 
 def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, optic_nerve_data, axes):
     """Calculate residuals for registration of an ellipsoid model with a fixed rotation.
-    This function computes the residuals between a set of 3D points (`clip_data`) and a rotated, translated ellipsoid model,
+    This function computes the residuals between a set of 3D points (`clip_data`) and a rotated, translated ellipsoid
+    model,
     as well as the normalized squared distance between the predicted and observed optic nerve (ON) locations.
 
     Parameters

@@ -226,7 +226,8 @@ def calc_sclera_center_to_match_white_to_white(
 def calc_sclera_ellipse_for_center(
     structure_set: object, eye_model_parameters: object, marker_location: str, center_translations: list
 ) -> list:
-    """Returns the best-fitting sclera ellipse radii for marker locations and one or an array of ellipse center locations.
+    """Returns the best-fitting sclera ellipse radii for marker locations and one or an array of ellipse center
+    locations.
 
     Parameters
     ----------
