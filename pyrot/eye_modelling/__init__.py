@@ -1,11 +1,11 @@
 """Eye modelling
 =============
 
-The eye_modelling module provides methods matching the geometric eye-model to imaging and biometry data.
+The eye_modelling module provides methods for matching the geometric eye model to imaging and biometry data.
 
 Notes
 -----
-The methods used in this package are based on the work of Pors et al. (submitted)
+The methods used in this package are based on the work of Pors et al. (submitted).
 
 Modules
 -------

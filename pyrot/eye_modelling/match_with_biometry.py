@@ -43,9 +43,9 @@ def calc_elliptical_cornea_radii(
 
     logger.debug("start calc_elliptical_cornea_radii function")
 
-    # RayOcular defines the cornea based on its innerdiameter, but you specify the outer diameter
-    # we set the LR/IS radii of the cornea ellipse based on a predefined shape factor and limbus_radius
-    # and calculate the AP radius to  give the correct AD
+    # RayOcular defines the cornea based on its inner diameter, but you specify the outer diameter
+    # we set the LR/IS radii of the cornea ellipse based on a predefined shape factor and limbus radius
+    # and calculate the AP radius to give the correct AD
 
     cornea_lr_is_outer_radius = shape_factor * iris_outerradius
 
@@ -70,7 +70,7 @@ def calc_elliptical_cornea_radii(
     )  # as the cornea cross-section is obtained at the front iris plane, while the lens is at the back plane
     logger.debug("ad_eff: %s", ad_eff)
 
-    # calculate ap inner radius (refer to documentation for the formulation of this formula)
+    # calculate AP inner radius (refer to documentation for the formulation of this formula)
     cor_ap_innerradius = (
         ad_eff
         * cornea_lr_is_innerradius
@@ -153,7 +153,7 @@ def calc_iris_outerradius(
 
     logger.debug("start calc_iris_outerradius function")
 
-    # convert outer radii (as specified by RayOcular) to innerradii (where the intersections are located)
+    # convert outer radii (as specified by RayOcular) to inner radii (where the intersections are located)
     sclera_min_outer_radius = min(sclera_lr_outer_radius, sclera_is_outer_radius)
     sclera_min_innerradius = sclera_min_outer_radius - sclera_thickness
     sclera_ap_innerradius = sclera_ap_outer_radius - sclera_thickness
@@ -182,15 +182,15 @@ def match_eye_model(
     eye_model_generators: object, eye_model_parameters: object, biometry_data: dict, cornea_type: str
 ) -> None:
     """Match the eye model parameters with the provided biometry data.
-    Make the iris outerradius such that the vitreous length is correct
-    and subsequently make the cornea radii such that the AD is correct.
+    Set the iris outer radius so that the vitreous length is correct,
+    then set the cornea radii so that the AD is correct.
 
     Parameters
     ----------
-    eye_model : object
+    eye_model_generators : object
         The eye model object from RayOcular.
     eye_model_parameters : object
-        An object containing specific eye model parameters
+        An object containing specific eye model parameters.
     biometry_data : dict
         Dictionary containing biometry measurements.
     cornea_type : str
@@ -237,7 +237,7 @@ def match_eye_model(
     )
     logger.debug("iris_outerradius: %s", iris_outerradius)
 
-    # check that the iris outer radius matches the input (as this, if it is based on the wtw, is affected by some complicated steps including linear interpolation)
+    # check that the iris outer radius matches the input (as this, if it is based on the WTW, is affected by some complicated steps including linear interpolation)
     if not math.isclose(iris_outerradius, biometry_data["WTW"] / 2, abs_tol=Config.IRIS_OUTER_RADIUS_TOLERANCE):
         logger.warning(
             "input WTW semi-diameter (%.4f) differs >= %.4f  cm from output (%.4f)",

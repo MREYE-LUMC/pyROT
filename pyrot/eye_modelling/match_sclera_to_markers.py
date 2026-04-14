@@ -34,13 +34,13 @@ def match_sclera_to_markers(
     eye_model_generators : object
         The eye model containing eye parameters.
     eye_model_parameters : object
-        An object with only specific eye model parameters
+        An object containing only specific eye model parameters.
     eye_shape : str
         The shape of the eye model. Options are "sphere", "EYEPLAN", "ellipsoid", "ellipsoid_fixedCenter".
         "sphere" returns a sphere
         "EYEPLAN" returns an ellipsoid with the same radii in IS and LR directions
         "ellipsoid" returns an ellipsoid
-        "ellipsoid_fixedCenter" returns an ellipsoid but uses use a predefined shift in ellipsoid center location
+        "ellipsoid_fixedCenter" returns an ellipsoid but uses a predefined shift in ellipsoid center location
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
         "clips" means the location of the clips, which are sutured on the sclera
@@ -131,19 +131,19 @@ def calc_sclera_center_to_match_white_to_white(
     n_evaluations: int = 31,
 ) -> float:
     """Calculate the ellipsoid center location so it matches the WTW-width at vitreous depth.
-    This is to ensure the models limbus diameter matches the measured limbus diameter/ White To White,
-    without compromising on correctness of anterior chamber biometry.
+    This is to ensure the model's limbus diameter matches the measured limbus diameter / white-to-white,
+    without compromising the correctness of anterior chamber biometry.
 
     Uses linear interpolation to find this center translation.
-    By default calculates one sample per .1 mm to account for the nonlinearity of the limbus diameter and center translation relation.
-    Using less samples with a quadratic interpolation using e.g. scipy would be more efficient/ elegant, but this is not possible in some (clinical) RayOcular scripting environments.
+    By default, it calculates one sample per 0.1 mm to account for the nonlinearity of the limbus diameter and center translation relation.
+    Using fewer samples with quadratic interpolation (for example with scipy) would be more efficient and more elegant, but this is not possible in some clinical RayOcular scripting environments.
 
     Parameters
     ----------
     structure_set : object
         The structure set containing the POI geometries.
     eye_model_parameters : object
-        An object containing only specific eye model parameters
+        An object containing only specific eye model parameters.
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
     biometry_data : dict
@@ -184,7 +184,7 @@ def calc_sclera_center_to_match_white_to_white(
     logger.debug("Limbus half-axes: %s", limbus_halfaxes)
 
     # The range of necessary evaluated center translations differs much per patient
-    # On the one hand, we want to evaluated a fixed amount of center translatiosn for each patient
+    # On the one hand, we want to evaluate a fixed amount of center translations for each patient
     # On the other hand, this prompts us to evaluate some very extreme center translations in some patients, leading to extreme values
     # these extreme eye models can be recognised by seeing that a larger center translation to posterior leads to a larger limbus radius
     # these extreme eye models would clutter the linear interpolation, so we detect and delete these evaluated eye models and give the user a warning if this happens
@@ -195,7 +195,7 @@ def calc_sclera_center_to_match_white_to_white(
         limbus_halfaxes = limbus_halfaxes[loc_min_limbus_halfaxis:]  # delete the extreme eye models
         center_translations = center_translations[loc_min_limbus_halfaxis:]
         logger.info(
-            "Some unrealistic limbus models were found, these are deleted.\nInput for linear interpolation are:\n center_translations: %s and limbus_halfaxes: %s",
+            "Some unrealistic limbus models were found, these are deleted.\nInputs for linear interpolation are:\n center_translations: %s and limbus_halfaxes: %s",
             center_translations,
             limbus_halfaxes,
         )
@@ -226,14 +226,15 @@ def calc_sclera_center_to_match_white_to_white(
 def calc_sclera_ellipse_for_center(
     structure_set: object, eye_model_parameters: object, marker_location: str, center_translations: list
 ) -> list:
-    """Returns best fitting sclera ellipse radii to marker locations for one or an array of ellipse center locations.
+    """Returns the best-fitting sclera ellipse radii for marker locations and one or an array of ellipse center
+    locations.
 
     Parameters
     ----------
     structure_set : object
         The structure set containing the POI geometries.
     eye_model_parameters : object
-        The eye model object containing only eye parameters
+        The eye model object containing only specific eye parameters.
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
     center_translations : list
@@ -316,12 +317,12 @@ def calc_sclera_ellipse_for_center(
 
 
 def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list: list) -> float or list:
-    """Determines limbus half-axes of one or an array of sclera ellipses so it matches the vitreous depth.
+    """Determines limbus half-axes for one or an array of sclera ellipses so they match the vitreous depth.
 
     Parameters
     ----------
     eye_model_parameters : object
-        An object containing only specific eye parameters
+        An object containing only specific eye parameters.
     biometry_data : dict
         The biometry data containing measurements like 'AL', 'AD', and 'AD_offset'.
     radii_list : list
@@ -416,14 +417,14 @@ def rotate_eye_model(
     if based_on == "optic_disk":
         # import the location of the optic disk
         on_image_loc = ro_interface.load_pois(structure_set, poi_type=poi_type_on)
-        # assert that there is only one poi with this poi type
+        # assert that there is only one POI with this POI type
         if len(on_image_loc) != 1:
             raise ValueError(f"multiple pois of the type {poi_type_on} exist")
         on_image_loc = on_image_loc[0]
 
-        # import the eyes current rotation
+        # import the eye's current rotation
         eye_rotation_in = eye_model_parameters.EyeRotation
-        # import all rois
+        # import all ROIs
         rois = ro_interface.load_rois(structure_set)
 
         # set input for rotation functions
@@ -432,7 +433,7 @@ def rotate_eye_model(
         retina_center_ap = rois[roi_name_vitreous].GetCenterOfRoi()["y"]
         retina_center_is = rois[roi_name_vitreous].GetCenterOfRoi()["z"]
 
-        # the sclera semi axis is defined on the outside of the sclera while the center of the optic disk ROI is approximately in the middle of the retina
+        # the sclera semi-axis is defined on the outside of the sclera while the center of the optic disk ROI is approximately in the middle of the retina
         retina_axis_rl = (
             eye_model_parameters.ScleraSemiAxis["x"]
             - eye_model_parameters.ScleraThickness
@@ -457,7 +458,7 @@ def rotate_eye_model(
         optic_disc_poi_ap = on_image_loc.Point["y"]
         optic_disc_poi_is = on_image_loc.Point["z"]
 
-        # calculate the roll difference between the current location of the optic disk and the clicked poi
+        # calculate the roll difference between the current location of the optic disk and the clicked POI
         roll_angle_deg = calc_rotation_to_align_points(
             retina_center=(retina_center_rl, retina_center_ap),
             retina_axes=(retina_axis_rl, retina_axis_ap),
@@ -465,7 +466,7 @@ def rotate_eye_model(
             optic_disc_poi=(optic_disc_poi_rl, optic_disc_poi_ap),
         )
 
-        # calculate the pitch difference between the current location of the optic disk and the clicked poi
+        # calculate the pitch difference between the current location of the optic disk and the clicked POI
         pitch_angle_deg = calc_rotation_to_align_points(
             retina_center=(retina_center_ap, retina_center_is),
             retina_axes=(retina_axis_ap, retina_axis_is),
@@ -488,7 +489,7 @@ def rotate_eye_model(
 def project_point_to_ellipse(center, axes, point):
     """Projects a point onto the boundary of an ellipse.
 
-    Does this by first calculating the function of the line between the point and the center of the sclera.
+    Does this by first calculating the equation of the line between the point and the center of the sclera.
     Subsequently, the intersection between this line and the sclera ellipse is calculated.
 
     Parameters
@@ -580,7 +581,7 @@ def calc_rotation_to_align_points(
     optic_disc_eyemodel (tuple)
         the location of the optic disk of the current eye model
     optic_disc_poi (tuple)
-        the clicked poi of the actual location of the optic disk
+        the clicked POI of the actual location of the optic disk
 
     Returns
     -------
@@ -593,7 +594,7 @@ def calc_rotation_to_align_points(
     optic_disc_poi_on_ellipse = project_point_to_ellipse(retina_center, retina_axes, optic_disc_poi)
     optic_disc_eyemodel_on_ellipse = project_point_to_ellipse(retina_center, retina_axes, optic_disc_eyemodel)
 
-    # Compute the rotation angle from the optic disk of the eye model (projected to the sclera) to the input optic disc location poi (projected to the sclera)
+    # Compute the rotation angle from the optic disk of the eye model (projected to the sclera) to the input optic disc location POI (projected to the sclera)
     return calc_angle_between_points(retina_center, optic_disc_eyemodel_on_ellipse, optic_disc_poi_on_ellipse)
 
 
