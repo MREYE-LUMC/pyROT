@@ -236,7 +236,7 @@ def positive_float(value: Any) -> float:
 # Use a dataclass because of JSON serialization
 @dataclasses.dataclass(frozen=True)
 class Vector3(Generic[T]):
-    """three-dimensional vector with components of a given type.
+    """Three-dimensional vector with components of a given type.
 
     Attributes
     ----------
