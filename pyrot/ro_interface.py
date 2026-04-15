@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_current_patient():
-    """Loads and returns the current patient associated with the active examination.
+    """Load the current patient associated with the active examination.
 
     Returns
     -------
@@ -24,14 +24,13 @@ def load_current_patient():
 
 
 def load_current_structureset():
-    """Loads and returns the current StructureSet associated with the active examination.
+    """Load the current StructureSet associated with the active examination.
 
     Returns
     -------
     StructureSet
         The StructureSet object corresponding to the current examination.
     """
-
     case = get_current("Case")
     examination = get_current("Examination")
     examination_name = examination.Name
@@ -80,7 +79,6 @@ def load_pois(structure_set, poi_type: Optional[str] = None, poi_name_contains: 
     list
         A list of POI geometries matching the specified criteria.
     """
-
     pois = structure_set.PoiGeometries
 
     if poi_type:
@@ -108,7 +106,6 @@ def load_rois(structure_set, roi_type: Optional[str] = None, roi_name_contains: 
     list
         A list of ROI geometries matching the specified filters.
     """
-
     rois = structure_set.RoiGeometries
 
     if roi_type:
@@ -129,6 +126,5 @@ def update_eye_model(eye_model_generators, new_values):
     new_values : dict
         Dictionary containing the new parameter values to update the eye model with.
     """
-
     logger.debug("updating eye model with new eye model values %s:", new_values)
     eye_model_generators.EyeModelParameters.EditEyeModelParameters(NewValues=new_values)

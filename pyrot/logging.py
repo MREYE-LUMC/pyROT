@@ -35,7 +35,6 @@ class PyrotMessageBoxHandler(StreamHandler):
     @staticmethod
     def show_message_box(title: str, message: str, level: str) -> None:
         """Show a message box with the given title and message."""
-
         level = level.lower()
 
         if level == "warning":

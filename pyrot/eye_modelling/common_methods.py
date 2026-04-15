@@ -63,7 +63,7 @@ def toDegrees(angleRadians: float) -> float:
 
 
 def getIdentityMatrix() -> np.ndarray:
-    """Returns a 4x4 identity matrix.
+    """Create a 4x4 identity matrix.
 
     Returns
     -------

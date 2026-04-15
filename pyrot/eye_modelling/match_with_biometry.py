@@ -40,7 +40,6 @@ def calc_elliptical_cornea_radii(
     cornea_min_radius : float
         Minimum radius of the cornea in cm.
     """
-
     logger.debug("start calc_elliptical_cornea_radii function")
 
     # RayOcular defines the cornea based on its inner diameter, but you specify the outer diameter
@@ -88,6 +87,7 @@ def calc_spherical_cornea_radii(
     iris_thickness: float,
 ) -> float:
     """Determine the cornea radii for a spherical cornea based on a specific AD and limbus radius.
+
     r = (a^2 + b^2)/2a with a = distance posterior corneal surface to anterior iris surface and b = limbus radius
     see also the folder 'documentation'.
 
@@ -107,7 +107,6 @@ def calc_spherical_cornea_radii(
     cornea_outerradius : float
         Outer radius of the cornea in cm. Only one radius as the cornea model is a sphere.
     """
-
     logger.debug("start calc_spherical_cornea_radii function")
 
     cornea_to_front_iris = (
@@ -150,7 +149,6 @@ def calc_iris_outerradius(
     iris_outerradius : float
         Outer radius of the iris in cm.
     """
-
     logger.debug("start calc_iris_outerradius function")
 
     # convert outer radii (as specified by RayOcular) to inner radii (where the intersections are located)
@@ -182,6 +180,7 @@ def match_eye_model(
     eye_model_generators: object, eye_model_parameters: object, biometry_data: dict, cornea_type: str
 ) -> None:
     """Match the eye model parameters with the provided biometry data.
+
     Set the iris outer radius so that the vitreous length is correct,
     then set the cornea radii so that the AD is correct.
 
@@ -203,7 +202,6 @@ def match_eye_model(
     NotImplementedError
         If an unsupported cornea type is provided.
     """
-
     logger.debug("start match_eye_model function")
 
     # Get relevant eye-model parameters from RayOcular
@@ -301,6 +299,20 @@ def match_eye_model(
 
 # ---
 def get_eye_model_geometry(eye_model, structure_type):
+    """Retrieve an eye model geometry generator by structure type.
+
+    Parameters
+    ----------
+    eye_model : object
+        The eye model object containing geometry generators.
+    structure_type : object
+        The structure type to search for.
+
+    Returns
+    -------
+    object
+        The geometry generator with the matching structure type.
+    """
     return next(
         rg
         for rg in eye_model.EyeModelParameters.AssociatedRoiGeometries

@@ -28,7 +28,8 @@ def match_ellipse_with_pois(
     poi_type_on,
     rotation_method,
 ):
-    """Registers the eye model to the clip locations (on the sclera) and optic disk location.
+    """Register the eye model to clip locations (on the sclera) and the optic disk location.
+
     Rotation of the eye model is either determined by minimizing the distance to the optic disk POI, or by rotating the
     model such that the visual axis goes through the eye center and optic disk POI.
     In the first case, the eye center and rotation are fit parameters, while in the latter case the eye center is the
@@ -186,7 +187,8 @@ def match_ellipse_with_pois(
 
 
 def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_model_loc_method):
-    """Determines the location of the optic disk for an eye model that is positioned at the origin
+    """Determine the optic disk location for an eye model positioned at the origin.
+
     ([0, 0, 0]) with input angles [0, 0, 0] and sclera radii of [1, 1, 1]. This is necessary as the method where
     rotation is fitted relies on a methodology where all POIs are translated to the unity circle.
     Currently, only the "unity_circle_standard_model" method is implemented, which assumes the optic disk location
@@ -218,7 +220,6 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
     - The function assumes the optic disk location has not been manually changed within the eye model.
     - Validation and additional testing for different eye models are recommended (see TODOs in code).
     """
-
     logger.debug("Starting calc_on_model_loc_patient function")
 
     if on_model_loc_method == "unity_circle_standard_model":
@@ -259,6 +260,7 @@ def calc_on_model_loc_patient(geometry_generators, eye_model_parameters, on_mode
 
 def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, optic_nerve_data, axes):
     """Calculate residuals for registration of an ellipsoid model with a fixed rotation.
+
     This function computes the residuals between a set of 3D points (`clip_data`) and a rotated, translated ellipsoid
     model,
     as well as the normalized squared distance between the predicted and observed optic nerve (ON) locations.
@@ -332,7 +334,8 @@ def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, opti
 
 
 def calc_ellipsoid_registration_with_fitted_rotation(clip_data, on_model_loc, on_image_loc, axes, initial_guess=None):
-    """Performs a least-squares optimization to register an ellipsoid to the provided
+    """Perform a least-squares optimization to register an ellipsoid.
+
     clip data, fitting both the center and rotation angles based on the clip locations and the optic
     disk POI. The optimization minimizes the residuals between the transformed model and the observed data.
 
@@ -386,6 +389,7 @@ def calc_residuals_for_registration_with_calculated_rotation(
     params, clip_data, optic_nerve_data, axes, vitreous_body_center, eye_rotation_in, eye_translation_input
 ):
     """Calculate residuals for registration by computing distances from clip points to an ellipsoid.
+
     This function translates the clip data according to the provided eye center parameters, computes
     the necessary rotation to align the model with the observed optic nerve location, applies
     the rotation, and then calculates the residuals (distance to the ellipsoid surface) for each
@@ -477,8 +481,9 @@ def calc_ellipsoid_registration_with_calculated_rotation(
     eye_translation_in,
     initial_guess=None,
 ):
-    """Registers an ellipsoid model to clip POIs using least squares optimization,
-    incorporating calculated eye rotation and translation. Rotation is based purely on the
+    """Register an ellipsoid model to clip POIs using least squares optimization.
+
+    The optimization incorporates calculated eye rotation and translation. Rotation is based purely on the
     location of the optic disk, while translation is based on the clip location. For each
     evaluated center translation, the corresponding rotation is calculated and thereafter,
     the residuals are calculated.
@@ -530,8 +535,8 @@ def calc_ellipsoid_registration_with_calculated_rotation(
 def calc_roll_and_pitch_of_shifted_eyemodel(
     retina_center_location, axes, on_model_loc, on_image_loc, eye_translation_before_shift, eye_translation_after_shift
 ):
-    """Calculates the roll and pitch angles required to align a shifted eye model with the specified optic disc
-    positions.
+    """Calculate the roll and pitch angles required to align a shifted eye model with the specified optic disc positions.
+
     This function computes the roll and pitch corrections for an eye model after a translational shift, based on the
     locations of the retina center, retina axes, optic disc model center, and the optic disc point of interest (POI) as
     clicked on the MRI image.

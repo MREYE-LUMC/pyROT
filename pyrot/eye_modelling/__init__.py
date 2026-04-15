@@ -1,5 +1,4 @@
-"""Eye modelling
-=============
+"""Eye modelling.
 
 The eye_modelling module provides methods for matching the geometric eye model to imaging and biometry data.
 

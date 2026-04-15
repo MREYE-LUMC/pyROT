@@ -2,6 +2,13 @@ extend = "../pyproject.toml"
 
 [lint]
 extend-ignore = [
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public nested class
+    "D105", # Missing docstring in public static method
+    "D106", # Missing docstring in public class method
     "LOG015",  # Allow root logger calls
 ]
 

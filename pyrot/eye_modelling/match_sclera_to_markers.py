@@ -54,7 +54,6 @@ def match_sclera_to_markers(
     NotImplementedError
         If an unsupported eye shape or marker location is provided.
     """
-
     logger.debug("start match_sclera_to_markers function")
     logger.debug("eyeShape: %s", eye_shape)
     logger.debug("markerLocation: %s", marker_location)
@@ -131,6 +130,7 @@ def calc_sclera_center_to_match_white_to_white(
     n_evaluations: int = 31,
 ) -> float:
     """Calculate the ellipsoid center location so it matches the WTW-width at vitreous depth.
+
     This is to ensure the model's limbus diameter matches the measured limbus diameter / white-to-white,
     without compromising the correctness of anterior chamber biometry.
 
@@ -159,14 +159,7 @@ def calc_sclera_center_to_match_white_to_white(
     -------
     float
         The center translation based on the WTW radius.
-
-    Raises
-    ------
-    LookupError
-        If the WTW radius is outside the range of evaluated limbus half-axes.
-        This would mean the limbus diameter of the model would differ from the measured limbus diameter
     """
-
     logger.debug("start calc_sclera_center_to_match_white_to_white function")
     # Define a list of center translations to evaluate (best fitting ellipse center+translation = 0 )
     center_translations = np.linspace(start=evaluations_start, stop=evaluations_stop, num=n_evaluations)
@@ -226,7 +219,9 @@ def calc_sclera_center_to_match_white_to_white(
 def calc_sclera_ellipse_for_center(
     structure_set: object, eye_model_parameters: object, marker_location: str, center_translations: list
 ) -> list:
-    """Returns the best-fitting sclera ellipse radii for marker locations and one or an array of ellipse center
+    """Calculate the best-fitting sclera ellipse radii for marker locations and center locations.
+
+    Returns the best-fitting sclera ellipse radii for marker locations and one or an array of ellipse center
     locations.
 
     Parameters
@@ -250,7 +245,6 @@ def calc_sclera_ellipse_for_center(
     NotImplementedError
         If an unsupported marker location is provided.
     """
-
     # TODO: future: merge with fit_eye_model_to_markers
 
     logger.debug("start calc_sclera_ellipse_for_center function")
@@ -284,7 +278,7 @@ def calc_sclera_ellipse_for_center(
         markers_for_fit[:, 1] += center_translation
 
         # Fit the corresponding center, radii and evecs
-        center, radii, evecs, condition_of_inverse = ellipsoid_fit(markers_for_fit, eye_shape="ellipsoid_fixedCenter")
+        _, radii, evecs, condition_of_inverse = ellipsoid_fit(markers_for_fit, eye_shape="ellipsoid_fixedCenter")
 
         # Assert that the eigen vectors are as expected (x, y, z). The algorithm has shown to sometimes generate a different order
         assert abs(np.sum(evecs - np.eye(3))) < 1e-10  # noqa: PLR2004
@@ -317,7 +311,7 @@ def calc_sclera_ellipse_for_center(
 
 
 def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list: list) -> float or list:
-    """Determines limbus half-axes for one or an array of sclera ellipses so they match the vitreous depth.
+    """Calculate limbus half-axes for one or an array of sclera ellipses so they match the vitreous depth.
 
     Parameters
     ----------
@@ -333,7 +327,6 @@ def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list
     float or list
         The limbus half-axes for the given sclera ellipses.
     """
-
     logger.debug("start calc_limbusrad function")
 
     # Validate input parameters
@@ -408,10 +401,11 @@ def rotate_eye_model(
 
     Raises
     ------
+    ValueError
+        If there are multiple POIs with the specified POI type for the optic nerve/disk location.
     NotImplementedError
         If the method designated in the 'based_on' variable is not supported
     """
-
     logger.debug("start rotate_eye_model function")
 
     if based_on == "optic_disk":
@@ -504,8 +498,12 @@ def project_point_to_ellipse(center, axes, point):
     Returns
     -------
         tuple: (x_proj, y_proj) coordinates of the projected point on the ellipse.
-    """
 
+    Raises
+    ------
+    ValueError
+        If the point is at the center of the ellipse, as the projection is undefined in this case.
+    """
     logger.debug("start project_point_to_ellipse function")
 
     x_c, y_c = center
@@ -530,7 +528,7 @@ def project_point_to_ellipse(center, axes, point):
 
 
 def calc_angle_between_points(center, from_point, to_point):
-    """Computes the angle (in degrees) needed to rotate from one point to another, relative to the same center.
+    """Calculate the angle (in degrees) needed to rotate from one point to another, relative to the same center.
 
     Parameters
     ----------
@@ -545,7 +543,6 @@ def calc_angle_between_points(center, from_point, to_point):
     -------
     float : Rotation angle in degrees (positive = counter-clockwise).
     """
-
     logger.debug("start calc_angle_between_points function")
 
     x_c, y_c = center
@@ -569,7 +566,9 @@ def calc_rotation_to_align_points(
     optic_disc_eyemodel: tuple,
     optic_disc_poi: tuple,
 ) -> float:
-    """Main wrapper function to compute the optimal rotation angle (in degrees)
+    """Calculate the optimal rotation angle (in degrees) to align an ellipse point with a manual input.
+
+    Main wrapper function to compute the optimal rotation angle (in degrees)
     to align an ellipse_point with the projection of a manual_input.
 
     Parameters
@@ -587,7 +586,6 @@ def calc_rotation_to_align_points(
     -------
     float : Rotation angle in degrees.
     """
-
     logger.debug("start calc_rotation_to_align_points function")
 
     # Project the input onto the retina ellipse
