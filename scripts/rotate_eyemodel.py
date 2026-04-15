@@ -3,8 +3,9 @@ import __common__
 import logging
 import sys
 
-import pyrot.eye_modelling.match_sclera_to_markers as rotate_eyemodel
 from connect import *  # noqa: F403
+
+import pyrot.eye_modelling.match_sclera_to_markers as rotate_eyemodel
 from pyrot import ro_interface
 from pyrot.config import Config
 

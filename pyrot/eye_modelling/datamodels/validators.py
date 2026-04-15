@@ -190,14 +190,26 @@ def dataclass(cls: type[T]) -> Callable[..., T]:
     -------
     Callable[..., T]
         A validator function that can be used to validate instances of the dataclass.
-
-    Raises
-    ------
-    ValueError
-        If the value is not an instance of the dataclass or a dict that can be used to create an instance of the dataclass.
-    """  # noqa: DOC502
+    """
 
     def validate(value) -> T:
+        """Validate a value as an instance of the dataclass.
+
+        Parameters
+        ----------
+        value : Any
+            The value to validate.
+
+        Returns
+        -------
+        T
+            The validated dataclass instance.
+
+        Raises
+        ------
+        ValueError
+            If the value is not an instance of the dataclass or a dict that can be used to create an instance of the dataclass.
+        """
         if isinstance(value, cls):
             return value
 
@@ -267,14 +279,26 @@ def vector3(
     -------
     Callable[[Any], Vector3[T]]
         A validator function that can be used to validate Vector3 objects.
-
-    Raises
-    ------
-    ValueError
-        If the value is not a valid Vector3 object.
-    """  # noqa: DOC502
+    """
 
     def validate(value: Any) -> Vector3[T]:
+        """Validate a value as a Vector3 object.
+
+        Parameters
+        ----------
+        value : Any
+            The value to validate as a Vector3.
+
+        Returns
+        -------
+        Vector3[T]
+            The validated Vector3 object.
+
+        Raises
+        ------
+        ValueError
+            If the value is not a valid Vector3 object.
+        """
         if isinstance(value, Vector3):
             return value
         if isinstance(value, Sequence):  # list-like values

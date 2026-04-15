@@ -7,6 +7,7 @@ import sys
 
 import numpy as np
 from connect import *  # noqa: F403
+
 from pyrot import ro_interface
 from pyrot.config import Config
 from pyrot.eye_modelling import match_sclera_to_markers

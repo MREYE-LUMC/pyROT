@@ -768,7 +768,7 @@ select = [
 ban-relative-imports = "all"
 
 [lint.isort]
-known-first-party = ["rayocular_toolbox"]
+known-first-party = ["pyrot"]
 
 [lint.flake8-pytest-style]
 fixture-parentheses = false
