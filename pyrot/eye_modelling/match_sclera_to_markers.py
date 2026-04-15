@@ -488,11 +488,13 @@ def rotate_eye_model(
 
         # input in model, keeping in mind that the model already had a rotation before our calculations
         new_values = {}
-        new_values["EyeRotation"] = np.asarray([
-            eye_rotation_in["x"] + pitch_angle_deg,
-            eye_rotation_in["y"],
-            eye_rotation_in["z"] + roll_angle_deg,
-        ])
+        new_values["EyeRotation"] = np.asarray(
+            [
+                eye_rotation_in["x"] + pitch_angle_deg,
+                eye_rotation_in["y"],
+                eye_rotation_in["z"] + roll_angle_deg,
+            ]
+        )
 
         ro_interface.update_eye_model(eye_model_generators, new_values)
 
