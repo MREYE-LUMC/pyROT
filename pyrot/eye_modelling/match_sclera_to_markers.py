@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import math
+from typing import overload
 
 import numpy as np
 
@@ -216,13 +217,29 @@ def calc_sclera_center_to_match_white_to_white(
     return center_translation_based_on_white_to_white
 
 
+@overload
 def calc_sclera_ellipse_for_center(
-    structure_set: object, eye_model_parameters: object, marker_location: str, center_translations: list
-) -> list:
-    """Calculate the best-fitting sclera ellipse radii for marker locations and center locations.
+    structure_set: object, eye_model_parameters: object, marker_location: str, center_translations: np.ndarray
+) -> np.ndarray: ...
 
-    Returns the best-fitting sclera ellipse radii for marker locations and one or an array of ellipse center
-    locations.
+
+@overload
+def calc_sclera_ellipse_for_center(
+    structure_set: object, eye_model_parameters: object, marker_location: str, center_translations: list[np.ndarray]
+) -> list[np.ndarray]: ...
+
+
+def calc_sclera_ellipse_for_center(
+    structure_set: object,
+    eye_model_parameters: object,
+    marker_location: str,
+    center_translations: np.ndarray | list[np.ndarray],
+) -> np.ndarray | list[np.ndarray]:
+    """Calculate the best-fitting sclera ellipse radii given a marker locations and one or more center translations.
+
+    For each center translation, the sclera ellipse radii are calculated based on fitting an ellipse to the marker locations.
+    If a single center translation is given, a single set of sclera ellipse radii is returned.
+    If multiple center translations are given, a list of the corresponding sclera ellipse radii is returned.
 
     Parameters
     ----------
@@ -232,13 +249,14 @@ def calc_sclera_ellipse_for_center(
         The eye model object containing only specific eye parameters.
     marker_location : str
         The location of the markers. Options are 'clips', 'choroid', 'nocorrection'.
-    center_translations : list
+    center_translations : np.ndarray | list[np.ndarray]
         The center translations to evaluate.
 
     Returns
     -------
-    list
-        List of radii for each center translation.
+    np.ndarray | list[np.ndarray]
+        A single set of sclera ellipse radii if a single center translation is given,
+        or a list of the corresponding sclera ellipse radii for each center translation if multiple center translations are given.
 
     Raises
     ------
@@ -310,7 +328,7 @@ def calc_sclera_ellipse_for_center(
     return radii_list
 
 
-def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list: list) -> float or list:
+def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list: list) -> float | list:
     """Calculate limbus half-axes for one or an array of sclera ellipses so they match the vitreous depth.
 
     Parameters
@@ -324,7 +342,7 @@ def calc_limbusrad(eye_model_parameters: object, biometry_data: dict, radii_list
 
     Returns
     -------
-    float or list
+    float | list
         The limbus half-axes for the given sclera ellipses.
     """
     logger.debug("start calc_limbusrad function")
@@ -470,9 +488,11 @@ def rotate_eye_model(
 
         # input in model, keeping in mind that the model already had a rotation before our calculations
         new_values = {}
-        new_values["EyeRotation"] = np.asarray(
-            [eye_rotation_in["x"] + pitch_angle_deg, eye_rotation_in["y"], eye_rotation_in["z"] + roll_angle_deg]
-        )
+        new_values["EyeRotation"] = np.asarray([
+            eye_rotation_in["x"] + pitch_angle_deg,
+            eye_rotation_in["y"],
+            eye_rotation_in["z"] + roll_angle_deg,
+        ])
 
         ro_interface.update_eye_model(eye_model_generators, new_values)
 

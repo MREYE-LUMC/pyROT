@@ -334,9 +334,9 @@ def calc_residuals_for_registration_with_fitted_rotation(params, clip_data, opti
 
 
 def calc_ellipsoid_registration_with_fitted_rotation(clip_data, on_model_loc, on_image_loc, axes, initial_guess=None):
-    """Perform a least-squares optimization to register an ellipsoid.
+    """Perform a least-squares optimization to register an ellipsoid to the provided clip data.
 
-    clip data, fitting both the center and rotation angles based on the clip locations and the optic
+    Both the center and rotation angles are optimized based on the clip locations and the optic
     disk POI. The optimization minimizes the residuals between the transformed model and the observed data.
 
     Parameters
