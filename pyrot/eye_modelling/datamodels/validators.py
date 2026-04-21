@@ -95,7 +95,7 @@ class ValidatedField(Generic[Value]):
         setattr(instance, self.private_name, self.validate(value))
 
     def validate(self, value: Value) -> Value:
-        """Validates the given value using the provided validator.
+        """Validate the given value using the provided validator.
 
         Parameters
         ----------
@@ -109,7 +109,7 @@ class ValidatedField(Generic[Value]):
 
         Raises
         ------
-        ValueError
+        ValidationError
             If the validation fails.
         """
         try:
@@ -177,7 +177,7 @@ T = TypeVar("T")
 
 
 def dataclass(cls: type[T]) -> Callable[..., T]:
-    """Validator for dataclasses.
+    """Validate dataclasses.
 
     Checks if the value is an instance of the dataclass or a dict that can be used to create an instance of the dataclass.
 
@@ -190,14 +190,26 @@ def dataclass(cls: type[T]) -> Callable[..., T]:
     -------
     Callable[..., T]
         A validator function that can be used to validate instances of the dataclass.
-
-    Raises
-    ------
-    ValueError
-        If the value is not an instance of the dataclass or a dict that can be used to create an instance of the dataclass.
     """
 
     def validate(value) -> T:
+        """Validate a value as an instance of the dataclass.
+
+        Parameters
+        ----------
+        value : Any
+            The value to validate.
+
+        Returns
+        -------
+        T
+            The validated dataclass instance.
+
+        Raises
+        ------
+        ValueError
+            If the value is not an instance of the dataclass or a dict that can be used to create an instance of the dataclass.
+        """
         if isinstance(value, cls):
             return value
 
@@ -210,7 +222,7 @@ def dataclass(cls: type[T]) -> Callable[..., T]:
 
 
 def positive_float(value: Any) -> float:
-    """Validator for positive floats.
+    """Validate positive floats.
 
     Parameters
     ----------
@@ -236,6 +248,18 @@ def positive_float(value: Any) -> float:
 # Use a dataclass because of JSON serialization
 @dataclasses.dataclass(frozen=True)
 class Vector3(Generic[T]):
+    """Three-dimensional vector with components of a given type.
+
+    Attributes
+    ----------
+    x : T
+        X component of the vector.
+    y : T
+        Y component of the vector.
+    z : T
+        Z component of the vector.
+    """
+
     x: T
     y: T
     z: T
@@ -244,7 +268,7 @@ class Vector3(Generic[T]):
 def vector3(
     item_validator: Callable[..., T],
 ) -> Callable[[Any], Vector3[T]]:
-    """Validator for Vector3 objects.
+    """Validate Vector3 objects.
 
     Parameters
     ----------
@@ -255,14 +279,26 @@ def vector3(
     -------
     Callable[[Any], Vector3[T]]
         A validator function that can be used to validate Vector3 objects.
-
-    Raises
-    ------
-    ValueError
-        If the value is not a valid Vector3 object.
     """
 
     def validate(value: Any) -> Vector3[T]:
+        """Validate a value as a Vector3 object.
+
+        Parameters
+        ----------
+        value : Any
+            The value to validate as a Vector3.
+
+        Returns
+        -------
+        Vector3[T]
+            The validated Vector3 object.
+
+        Raises
+        ------
+        ValueError
+            If the value is not a valid Vector3 object.
+        """
         if isinstance(value, Vector3):
             return value
         if isinstance(value, Sequence):  # list-like values
@@ -282,7 +318,7 @@ def vector3(
 
 
 def literal(type_: type[T]) -> Callable[[Any], T]:
-    """Validator for literal values.
+    """Validate literal values.
 
     Parameters
     ----------
@@ -306,7 +342,7 @@ def literal(type_: type[T]) -> Callable[[Any], T]:
 
 
 def optional(inner: Callable[..., T]) -> Callable[[Any], T | None]:
-    """Validator for optional values.
+    """Validate optional values.
 
     Parameters
     ----------

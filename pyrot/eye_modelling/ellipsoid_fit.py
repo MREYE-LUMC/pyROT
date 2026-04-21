@@ -45,7 +45,6 @@ def ellipsoid_fit(
     -----
     It does not find the exact best-fitting ellipse (see van Vught et al.).
     """
-
     # Based on a script by:
     # Yury Petrov, Oculus VR
     # https://www.mathworks.com/matlabcentral/fileexchange/24693-ellipsoid-fit

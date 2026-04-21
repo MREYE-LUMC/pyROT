@@ -25,7 +25,8 @@ def full_export(
     export_suffix: str,
     roi_export_unit: Literal["Millimeters", "Centimeters"],
 ):
-    """Exports all relevant data for a given eye model to a structured output directory.
+    """Export all relevant data for a given eye model to a structured output directory.
+
     This function gathers patient, case, and examination information, creates a uniquely named
     export directory, and exports ROI geometries, eye model data, and points of interest (POIs)
     for the specified eye model number.
@@ -41,17 +42,12 @@ def full_export(
     roi_export_unit : Literal["Millimeters", "Centimeters"]
         The unit to use when exporting ROI geometries.
 
-    Returns
-    -------
-    None
-
     Notes
     -----
     - The export directory is named using the current date and time, patient name, case name,
       examination name, and eye model number.
     - The function assumes that the current patient, case, and examination are set and accessible.
     """
-
     patient = get_current("Patient")
     case = get_current("Case")
     examination = get_current("Examination")
@@ -78,10 +74,33 @@ def full_export(
 
 
 def slugify(value: str) -> str:
+    """Replace non-alphanumeric characters with underscores.
+
+    Parameters
+    ----------
+    value : str
+        The string to slugify.
+
+    Returns
+    -------
+    str
+        The slugified string.
+    """
     return re.sub(r"[^\w\-_\.\s]", "_", value)
 
 
 def set_level_of_detail(patient, structure_set, level_of_detail: int):
+    """Set the level of detail of the structure set.
+
+    Parameters
+    ----------
+    patient : object
+        The patient object to save after updating.
+    structure_set : object
+        The structure set to update.
+    level_of_detail : int
+        The level of detail value to set.
+    """
     structure_set.GeometryGenerators[0].EyeModelParameters.EditEyeModelParameters(
         NewValues={"LevelOfDetail": [level_of_detail]}
     )
@@ -95,7 +114,8 @@ def export_roi_geometries(
     export_suffix: str,
     roi_export_unit: str,
 ):
-    """Exports ROI geometries from a given structure set to STL files.
+    """Export ROI geometries from a given structure set to STL files.
+
     The function iterates over the ROI geometries in the provided structure set, filters them based on the specified
     export suffix,
     and exports each selected geometry as an STL file to the specified output directory. Exported files are named
@@ -126,7 +146,6 @@ def export_roi_geometries(
     - Temporary directories are used during export to avoid filename conflicts.
     - The function assumes that each geometry object has an `ExportRoiGeometryAsSTL` method.
     """
-
     geometries = structure_set.RoiGeometries
     geometry_names = geometries.keys()
 
@@ -180,24 +199,18 @@ def export_eye_model(structure_set, output_directory: Path, eyemodelnr: int):
     eyemodelnr : int
         The index of the eye model to export from the structure set.
 
-    Returns
-    -------
-    None
-        This function does not return anything. It writes the eye model data to a JSON file.
-
     Notes
     -----
     The exported file will be named as "eye_model_{eyemodelnr}.json" and will contain
     the serialized data of the selected eye model.
     """
-
     eye_model = EyeModel.from_rayocular(structure_set.GeometryGenerators[eyemodelnr])
 
     eye_model.save_json(output_directory / f"eye_model_{eyemodelnr}.json")
 
 
 def export_pois(structure_set, output_directory: Path, examination_name: str):
-    """Exports points of interest (POIs) from a structure set to a JSON file.
+    """Export points of interest (POIs) from a structure set to a JSON file.
 
     Parameters
     ----------
@@ -208,17 +221,11 @@ def export_pois(structure_set, output_directory: Path, examination_name: str):
     examination_name : str
         The name of the examination to associate with each POI.
 
-    Returns
-    -------
-    None
-        This function does not return anything. It writes the POIs to a JSON file.
-
     Notes
     -----
     The output JSON file will contain a dictionary where each key is the POI name and the value is a dictionary
     with the POI location, type, and associated examination name.
     """
-
     poi_gmtrs = list(structure_set.PoiGeometries)
     pois_export = {}
     for poi in poi_gmtrs:

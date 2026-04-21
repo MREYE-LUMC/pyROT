@@ -70,7 +70,7 @@ preview = "sphinx-autobuild docs docs/_build/html --open-browser --ignore docs/a
 
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "ruff_defaults.toml"
-dependencies = ["ruff==0.11.0"]
+dependencies = ["ruff==0.15.10"]
 
 [tool.ruff]
 extend = "ruff_defaults.toml"
@@ -83,6 +83,7 @@ exclude = ["Examples/"]
 [tool.ruff.lint]
 preview = true
 extend-select = [
+    "D",      # pydocstyle
     "LOG015", # Root logger call
 ]
 ignore = [
@@ -94,14 +95,23 @@ ignore = [
     "N803",   #TODO: snake_case implementation in next merge request
     "N802",   #TODO: snake_case implementation in next merge request
     "PYI019", # typing.Self is not available in Python 3.8
+    "UP045",  # Use `X | None` for type annotations
+
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "docs/**" = [
-    "INP001",  # __init__.py in implicit namespace package
+    "INP001", # __init__.py in implicit namespace package
 ]
 "tests/**" = [
-    "PLC2701", # Private members
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "PLC2701",
     "PLR6301",
 ]
 
@@ -126,6 +136,4 @@ summary-quotes-same-line = true
 linewrap-full-docstring = true
 
 [dependency-groups]
-dev = [
-    "pytest>=7.0.1",
-]
+dev = ["pytest>=7.0.1"]
