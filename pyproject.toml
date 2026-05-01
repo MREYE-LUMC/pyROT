@@ -53,14 +53,7 @@ python = ["3.6", "3.8"]
 [tool.hatch.envs.docs]
 installer = "uv"
 python = "3.13"
-dependencies = [
-    "myst-parser",
-    "pydata-sphinx-theme",
-    "sphinx",
-    "sphinx-autoapi",
-    "sphinx-autobuild",
-    "sphinx-design",
-]
+dependency-groups = ["docs"]
 
 [tool.hatch.envs.docs.scripts]
 build = "sphinx-build -M {args:html} docs docs/_build"
@@ -137,3 +130,11 @@ linewrap-full-docstring = true
 
 [dependency-groups]
 dev = ["pytest>=7.0.1"]
+docs = [
+    "myst-parser>=0.16.1",
+    "pydata-sphinx-theme>=0.7.2",
+    "sphinx>=4.5.0",
+    "sphinx-autoapi>=1.8.4",
+    "sphinx-autobuild>=2021.3.14",
+    "sphinx-design>=0.0.13",
+]
