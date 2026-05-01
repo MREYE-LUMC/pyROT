@@ -220,12 +220,14 @@ class AnteriorChamber(BaseModel):
         Local translation of the anterior chamber.
     """
 
-    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "ChamberLocalRotation")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "ChamberLocalRotation", importable=False
+    )
     local_scale: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(validators.positive_float), "ChamberLocalScale"
+        validators.vector3(validators.positive_float), "ChamberLocalScale", importable=False
     )
     local_translation: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(float), "ChamberLocalTranslation"
+        validators.vector3(float), "ChamberLocalTranslation", importable=False
     )
 
 
@@ -539,13 +541,13 @@ class VitreousBody(BaseModel):
     """
 
     local_rotation: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(float), "VitreousBodyLocalRotation"
+        validators.vector3(float), "VitreousBodyLocalRotation", importable=False
     )
     local_scale: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(validators.positive_float), "VitreousBodyLocalScale"
+        validators.vector3(validators.positive_float), "VitreousBodyLocalScale", importable=False
     )
     local_translation: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(float), "VitreousBodyLocalTranslation"
+        validators.vector3(float), "VitreousBodyLocalTranslation", importable=False
     )
 
 

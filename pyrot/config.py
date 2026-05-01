@@ -76,4 +76,4 @@ class Config:
     This is used for the eye rotation script.
     """
 
-    IMPORT_PATH: str = 'path/to/data'
+    IMPORT_PATH: str = "path/to/data"

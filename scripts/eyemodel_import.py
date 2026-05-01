@@ -15,9 +15,7 @@ logger.debug("commencing import")
 
 patient = ro_interface.load_current_patient()
 structure_set = ro_interface.load_current_structureset()
-geometry_generators, _ = ro_interface.load_eyemodel(
-    structure_set=structure_set,
-    eyemodelnr=Config.EYE_MODEL_NR)
+geometry_generators, _ = ro_interface.load_eyemodel(structure_set=structure_set, eyemodelnr=Config.EYE_MODEL_NR)
 import_path = Config.IMPORT_PATH  # TODO: iets dat 'eyemodel' dingen die in een .json zitten uit een mapje haalt
 
 model_import.import_eye_model(structure_set, geometry_generators, import_path)

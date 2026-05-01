@@ -20,16 +20,13 @@ def import_eye_model(structure_set, geometry_generators, import_path):
 
     print(new_values)
 
-
     ro_interface.update_eye_model(eye_model_generators=geometry_generators, new_values=new_values)
-
 
     # TODO: lenscorneadistance en levelofdetail moeten nog in een list gezet worden (nu handmatig)
     # TODO: oogmodel parameters van chamber en vitreous body moeten eruit gehaald (nu handmatig)
     # TODO: testen of hier hetzelfde oogmodel weer uit komt
     # TODO: kijken of de rotaties (en voor de zekerheid de afmetingen) in xyz ook echt in die volgorde moeten worden ingeladen
     # TODO: .json bestand pad uit uitgebreider mappen-directory halen
-
 
     print(new_values)
     print(eye_model.parameters.sclera.semi_axis)

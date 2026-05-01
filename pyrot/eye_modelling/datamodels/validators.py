@@ -129,6 +129,9 @@ class RayOcularField(ValidatedField[Value]):
         The RayOcular name of the field. This is used for serialization and deserialization to RayOcular.
     default : Value, optional
         The default value for the field. If not provided, the field will be required and must be set explicitly.
+    importable : bool, optional
+        Whether the field should be included when importing from RayOcular. If False, the field will be ignored during import.
+        Defaults to True.
 
     Attributes
     ----------
@@ -167,10 +170,13 @@ class RayOcularField(ValidatedField[Value]):
     ...         self.age = age
     """
 
-    def __init__(self, validator: Callable[[Any], Value], name: str, *, default: Value = ...) -> None:
+    def __init__(
+        self, validator: Callable[[Any], Value], name: str, *, default: Value = ..., importable: bool = True
+    ) -> None:
         self.rayocular_name = name
         self.validator = validator
         self._default = default
+        self.importable = importable
 
 
 T = TypeVar("T")
