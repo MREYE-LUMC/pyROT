@@ -98,20 +98,44 @@ class BaseModel:
         -------
         dict[str, Any]
             A dictionary that can be used to update the model in RayOcular.
+
+        Raises
+        ------
+        TypeError
+            If the data model instance is not a dataclass.
+        ValueError
+            If any field in the data model has a RayOcular name that overlaps with another field, which
+            causes conflicts when converting to a RayOcular dictionary.
         """
+        if not is_dataclass(self):
+            raise TypeError(f"All classes in the model must be dataclasses, but {type(self).__name__} is not.")
+
         rayocular_fields = {}
 
-        for field_name, field_value in type(self)._get_rayocular_fields().items():  # noqa: SLF001
-            value = getattr(self, field_name)
+        for field in fields(self):
+            value = getattr(self, field.name)
+            descriptor = type(self).__dict__.get(field.name)
 
-            if isinstance(value, BaseModel):
-                rayocular_fields[field_value.rayocular_name] = value.to_rayocular()
-            elif isinstance(value, Vector3):
-                rayocular_fields[field_value.rayocular_name] = [value.x, value.y, value.z]
-            elif is_dataclass(value):
-                rayocular_fields[field_value.rayocular_name] = asdict(value)
-            else:
-                rayocular_fields[field_value.rayocular_name] = [value]
+            if isinstance(descriptor, RayOcularField):
+                if not descriptor.importable:
+                    continue
+
+                if isinstance(value, Vector3):
+                    rayocular_fields[descriptor.rayocular_name] = [value.x, value.y, value.z]
+                elif is_dataclass(value):
+                    rayocular_fields[descriptor.rayocular_name] = asdict(value)
+                else:
+                    rayocular_fields[descriptor.rayocular_name] = [value]
+
+            elif isinstance(value, BaseModel):
+                # RayOcular fields cannot be BaseModels
+                value_dict = value.to_rayocular()
+                if set(rayocular_fields.keys()) & set(value_dict.keys()):
+                    raise ValueError(
+                        f"Field {field.name} in {type(self).__name__} has RayOcular fields that overlap with other fields. "
+                        "Nested BaseModel instances must have unique RayOcular field names to avoid conflicts."
+                    )
+                rayocular_fields.update(value_dict)
 
         return rayocular_fields
 
@@ -600,8 +624,8 @@ class EyeModelParameters(BaseModel):
     sclera: ValidatedField[Sclera] = ValidatedField(validators.dataclass(Sclera))
     vitreous_body: ValidatedField[VitreousBody] = ValidatedField(validators.dataclass(VitreousBody))
 
-    lens_cornea_distance: ValidatedField[float] = ValidatedField(validators.positive_float)
-    level_of_detail: ValidatedField[int] = ValidatedField(int)
+    lens_cornea_distance: RayOcularField[float] = RayOcularField(validators.positive_float, "LensCorneaDistance")
+    level_of_detail: RayOcularField[int] = RayOcularField(int, "LevelOfDetail")
 
     @classmethod
     def from_rayocular(cls, parameters) -> EyeModelParameters:
@@ -633,31 +657,6 @@ class EyeModelParameters(BaseModel):
             lens_cornea_distance=parameters.LensCorneaDistance,
             level_of_detail=parameters.LevelOfDetail,
         )
-
-    def to_rayocular(self) -> dict[str, Any]:
-        """Convert eye model parameters to a RayOcular dictionary.
-
-        Returns
-        -------
-        dict[str, Any]
-            A dictionary that can be used to update the model in RayOcular.
-        """
-        return {
-            **self.eye.to_rayocular(),
-            **self.anterior_chamber.to_rayocular(),
-            **self.ciliary_body.to_rayocular(),
-            **self.cornea.to_rayocular(),
-            **self.iris.to_rayocular(),
-            **self.lens.to_rayocular(),
-            **self.macula.to_rayocular(),
-            **self.optical_disc.to_rayocular(),
-            **self.optical_nerve.to_rayocular(),
-            **self.retina.to_rayocular(),
-            **self.sclera.to_rayocular(),
-            **self.vitreous_body.to_rayocular(),
-            "LensCorneaDistance": self.lens_cornea_distance,
-            "LevelOfDetail": self.level_of_detail,
-        }
 
 
 EyeLaterality = Literal["Left", "Right"]
