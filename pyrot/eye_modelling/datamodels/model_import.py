@@ -18,15 +18,14 @@ def import_eye_model(structure_set, geometry_generators, import_path):
 
     new_values = eye_model.parameters.to_rayocular()
 
-    # new_values = {
-    #     'ScleraThickness': [0.1],
-    #     # 'ScleraSemiAxis': [1.2071728589796027, 1.2436192876523449, 1.2461153979847381]
-    # }
+    print(new_values)
+
 
     ro_interface.update_eye_model(eye_model_generators=geometry_generators, new_values=new_values)
 
 
-
+    # TODO: lenscorneadistance en levelofdetail moeten nog in een list gezet worden (nu handmatig)
+    # TODO: oogmodel parameters van chamber en vitreous body moeten eruit gehaald (nu handmatig)
     # TODO: testen of hier hetzelfde oogmodel weer uit komt
     # TODO: kijken of de rotaties (en voor de zekerheid de afmetingen) in xyz ook echt in die volgorde moeten worden ingeladen
     # TODO: .json bestand pad uit uitgebreider mappen-directory halen
