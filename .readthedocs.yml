@@ -4,12 +4,6 @@ build:
    os: ubuntu-24.04
    tools:
       python: "3.8"
-   jobs:
-      pre_create_environment:
-         - asdf plugin add uv
-         - asdf install uv latest
-         - asdf global uv latest
-         - uvx hatch -e docs dep show requirements > requirements.txt
 
 sphinx:
   configuration: docs/conf.py
