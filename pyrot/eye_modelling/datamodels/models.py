@@ -106,10 +106,12 @@ class BaseModel:
 
             if isinstance(value, BaseModel):
                 rayocular_fields[field_value.rayocular_name] = value.to_rayocular()
+            elif isinstance(value, Vector3):
+                rayocular_fields[field_value.rayocular_name] = [value.x, value.y, value.z]
             elif is_dataclass(value):
                 rayocular_fields[field_value.rayocular_name] = asdict(value)
             else:
-                rayocular_fields[field_value.rayocular_name] = value
+                rayocular_fields[field_value.rayocular_name] = [value]
 
         return rayocular_fields
 
