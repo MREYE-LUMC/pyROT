@@ -75,3 +75,5 @@ class Config:
     Needs to be changed only if multiple eye models are present or the ROI name has been manually altered in RayOcular.
     This is used for the eye rotation script.
     """
+
+    IMPORT_PATH: str = "path/to/data"
