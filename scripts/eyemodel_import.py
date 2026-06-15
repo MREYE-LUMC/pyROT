@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 logger.debug("commencing import")
 
-patient = ro_interface.load_current_patient()
 import_directory = Config.IMPORT_DIRECTORY
 import_file_name_element = Config.IMPORT_FILE_NAME_ELEMENT
 eye_model_files = [file for file in os.listdir(import_directory) if import_file_name_element in file and file.lower().endswith(".json") and os.path.isfile(os.path.join(import_directory, file))]
