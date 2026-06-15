@@ -20,7 +20,7 @@ import_file_name_element = Config.IMPORT_FILE_NAME_ELEMENT
 eye_model_files = [file for file in os.listdir(import_directory) if import_file_name_element in file]
 if len(eye_model_files) != 1:
     raise KeyError(
-        f"import directory {import_directory} returns {len(eye_model_files)} files where only one is expected, please alter Config.IMPORT_FILE_NAME_ELEMENT in customization.py"
+        f"import directory {import_directory} contains {len(eye_model_files)} files where only one is expected, please alter Config.IMPORT_FILE_NAME_ELEMENT in customization.py"
     )
 import_path = os.path.join(import_directory, eye_model_files[0])
 
