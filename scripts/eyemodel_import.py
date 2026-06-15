@@ -28,7 +28,6 @@ structure_set = ro_interface.load_current_structureset()
 geometry_generators, _ = ro_interface.load_eyemodel(structure_set=structure_set, eyemodelnr=Config.EYE_MODEL_NR)
 
 # import the eye model to the relevant structure_set and geometry_generators object
-
 model_import.import_eye_model(geometry_generators, import_path)
 
 
