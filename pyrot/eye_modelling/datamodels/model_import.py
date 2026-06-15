@@ -1,7 +1,5 @@
 """Import eye model geometries to RayOcular."""
 
-# TODO:  walk through imports, assumed these should more ore less be equal to those of export.py
-
 from __future__ import annotations
 
 import logging
@@ -13,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def import_eye_model(geometry_generators, import_path):
-    """Export all relevant data for a given eye model to a structured output directory.
+    """Import all relevant data to a given eye model from a structured output directory.
 
     This function gathers patient, case, and examination information from an exported .json file
     (ideally, exported through pyROT's full_export function) and updates an eye model based on this information.
