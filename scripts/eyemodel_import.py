@@ -12,15 +12,6 @@ from pyrot.eye_modelling.datamodels import model_import
 logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler(sys.stdout)], force=True)
 logger = logging.getLogger(__name__)
 
-
-# --- user input
-
-import_method = "to_existing_eye_model"  # either 'to_existing_eye_model' or 'create_new_eye_model'
-new_eyemodel_name = "imported eye model"  # must be unique an non-empty
-new_eyemodel_description = "imported eye model"  # no requirements
-
-# --- end user input
-
 logger.debug("commencing import")
 
 patient = ro_interface.load_current_patient()
