@@ -77,11 +77,15 @@ class Config:
     """
 
     IMPORT_DIRECTORY: str = "path/to/data"
-    """The directory that contains the path to the data where the eye model that needs to be imported is stored.
-    """
+    """Directory from which the import script reads input data.
+
+     Set this to the path containing the files that should be imported.
+     The import script searches this directory for files whose names match the configured import pattern.
+     """
 
     IMPORT_FILE_NAME_ELEMENT: str = "eye_model"
-    """a string that contains an element that is only present in the file that stores the data of the eye model that is to be imported.
+    """String that must be present in filenames for the import script to process them.
 
-    Note that it is assumed that there is only one .json file in IMPORT_DIRECTORY that contains this element
-    """
+     Set this to the distinguishing part of the filenames that belong to the eye model export to import.
+     The import script uses this value to filter files found in `IMPORT_DIRECTORY` and import only matching files.
+     """
