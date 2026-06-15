@@ -77,5 +77,11 @@ class Config:
     """
 
     IMPORT_DIRECTORY: str = "path/to/data"
+    """The directory that contains the path to the data where the eye model that needs to be imported is stored.
+    """
 
     IMPORT_FILE_NAME_ELEMENT: str = "eye_model"
+    """a string that contains an element that is only present in the file that stores the data of the eye model that is to be imported.
+
+    Note that it is assumed that there is only one .json file in IMPORT_DIRECTORY that contains this element
+    """
