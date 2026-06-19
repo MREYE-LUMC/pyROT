@@ -1,5 +1,6 @@
 import __common__
 
+import glob
 import logging
 import os
 import sys
@@ -16,15 +17,9 @@ logger.debug("commencing import")
 
 import_directory = Config.IMPORT_DIRECTORY
 import_file_name_element = Config.IMPORT_FILE_NAME_ELEMENT
-eye_model_files = [
-    file
-    for file in os.listdir(import_directory)
-    if import_file_name_element in file
-    and file.lower().endswith(".json")
-    and os.path.isfile(os.path.join(import_directory, file))
-]
+eye_model_files = glob(f"*{import_file_name_element}*.json")
 if len(eye_model_files) != 1:
-    raise ValueError(
+    raise FileNotFoundError(
         f"import directory {import_directory} contains {len(eye_model_files)} files where only one is expected, please alter Config.IMPORT_FILE_NAME_ELEMENT in customization.py"
     )
 import_path = os.path.join(import_directory, eye_model_files[0])
