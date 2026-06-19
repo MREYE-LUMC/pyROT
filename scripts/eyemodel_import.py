@@ -17,7 +17,7 @@ logger.debug("commencing import")
 
 import_directory = Config.IMPORT_DIRECTORY
 import_file_name_element = Config.IMPORT_FILE_NAME_ELEMENT
-eye_model_files = glob(f"*{import_file_name_element}*.json")
+eye_model_files = glob.glob(f"{import_directory}/*{import_file_name_element}*.json")
 if len(eye_model_files) != 1:
     raise FileNotFoundError(
         f"import directory {import_directory} contains {len(eye_model_files)} files where only one is expected, please alter Config.IMPORT_FILE_NAME_ELEMENT in customization.py"
