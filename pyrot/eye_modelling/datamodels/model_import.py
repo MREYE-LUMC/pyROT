@@ -20,7 +20,7 @@ def import_eye_model(geometry_generators, path_to_json):
     ----------
     geometry_generators
         The geometry generators object containing the eye model to be updated with the imported data
-    import_path :
+    path_to_json :
         The path to the .json file containing the eye-model description
 
     Notes
