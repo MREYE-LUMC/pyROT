@@ -27,7 +27,7 @@ def import_eye_model(geometry_generators, path_to_json):
     -----
     assumes the format of the .json file matches that of the .json files exported by pyROT's full_export function.
     """
-    eye_model = EyeModel.load_json(import_path)
+    eye_model = EyeModel.load_json(path_to_json)
 
     new_values = eye_model.parameters.to_rayocular()
 
