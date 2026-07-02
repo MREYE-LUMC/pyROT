@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def import_eye_model(geometry_generators, import_path):
-    """Import all relevant data to a given eye model from a structured output directory.
+    """Updates the eye model of the geometry_generator to match the values of the .json file
 
     This function gathers patient, case, and examination information from an exported .json file
     (ideally, exported through pyROT's full_export function) and updates an eye model based on this information.
