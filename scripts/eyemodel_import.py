@@ -31,4 +31,4 @@ geometry_generators, _ = ro_interface.load_eyemodel(structure_set=structure_set,
 model_import.import_eye_model(geometry_generators, import_path)
 
 
-logger.debug("import complete")
+logger.info("import complete")
