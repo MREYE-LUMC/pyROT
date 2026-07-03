@@ -25,11 +25,11 @@ def import_eye_model(geometry_generators, path_to_json: PathLike | str) -> None:
     geometry_generators
         The geometry generators object containing the eye model to be updated with the imported data
     path_to_json :
-        The path to the .json file containing the eye-model description
+        The path to the .json file containing the eye model description
 
     Notes
     -----
-    assumes the format of the .json file matches that of the .json files exported by pyROT's full_export function.
+    Assumes the format of the .json file matches that of the .json files exported by pyROT's `full_export` function.
     """
     eye_model = EyeModel.load_json(path_to_json)
 
