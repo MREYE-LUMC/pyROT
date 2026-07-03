@@ -3,15 +3,19 @@
 from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING
 
 from pyrot import ro_interface
 from pyrot.eye_modelling.datamodels.models import EyeModel
 
+if TYPE_CHECKING:
+    from os import PathLike
+
 logger = logging.getLogger(__name__)
 
 
-def import_eye_model(geometry_generators, path_to_json):
-    """Updates the eye model of the geometry_generator to match the values of the .json file
+def import_eye_model(geometry_generators, path_to_json: PathLike | str) -> None:
+    """Update the eye model of the geometry_generator to match the values of the .json file.
 
     This function gathers patient, case, and examination information from an exported .json file
     (ideally, exported through pyROT's full_export function) and updates an eye model based on this information.

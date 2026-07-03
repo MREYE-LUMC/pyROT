@@ -3,7 +3,6 @@ import __common__
 import glob
 import logging
 import os
-import sys
 
 from pyrot import ro_interface
 from pyrot.config import Config
