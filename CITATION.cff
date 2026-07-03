@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: pyROT
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+- family-names: Pors
+  given-names: Lennart
+  orcid: "https://orcid.org/0000-0003-0907-6637"
+- family-names: Haasjes
+  given-names: Corné
+  orcid: "https://orcid.org/0000-0003-0187-4116"
+- family-names: Beenakker
+  given-names: Jan-Willem M.
+  orcid: "https://orcid.org/0000-0003-0479-5587"
+contact:
+- family-names: Beenakker
+  given-names: Jan-Willem M.
+  orcid: "https://orcid.org/0000-0003-0479-5587"
+repository-code: 'https://github.com/MREYE-LUMC/pyROT'
+url: 'https://pyrot.readthedocs.io'
+keywords:
+  - uveal melanoma
+  - proton therapy
+  - treatment planning
+  - ophthalmology
+license: MIT
