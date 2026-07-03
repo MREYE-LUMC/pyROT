@@ -4,7 +4,6 @@ import logging
 import sys
 
 from connect import *  # type: ignore # noqa: F403
-
 from pyrot import ro_interface
 from pyrot.config import Config
 from pyrot.eye_modelling import clipbased_model
