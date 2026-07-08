@@ -75,3 +75,17 @@ class Config:
     Needs to be changed only if multiple eye models are present or the ROI name has been manually altered in RayOcular.
     This is used for the eye rotation script.
     """
+
+    IMPORT_DIRECTORY: str = "path/to/data"
+    """Directory from which the import script reads input data.
+
+     Set this to the path containing the files that should be imported.
+     The import script searches this directory for files whose names match the configured import pattern.
+    """
+
+    IMPORT_FILE_NAME_ELEMENT: str = "eye_model"
+    """String that must be present in filenames for the import script to process them.
+
+     Set this to the distinguishing part of the filenames that belong to the eye model export to import.
+     The import script uses this value to filter files found in `IMPORT_DIRECTORY` and import only matching files.
+    """

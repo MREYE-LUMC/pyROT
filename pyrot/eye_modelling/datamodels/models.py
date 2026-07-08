@@ -94,22 +94,50 @@ class BaseModel:
     def to_rayocular(self) -> dict[str, Any]:
         """Convert the data model instance to a RayOcular dictionary.
 
+        Only parameters that can be used as input for RayOcular's update functions are included in the output.
+
         Returns
         -------
         dict[str, Any]
             A dictionary that can be used to update the model in RayOcular.
+
+        Raises
+        ------
+        TypeError
+            If the data model instance is not a dataclass.
+        ValueError
+            If any field in the data model has a RayOcular name that overlaps with another field, which
+            causes conflicts when converting to a RayOcular dictionary.
         """
+        if not is_dataclass(self):
+            raise TypeError(f"All classes in the model must be dataclasses, but {type(self).__name__} is not.")
+
         rayocular_fields = {}
 
-        for field_name, field_value in type(self)._get_rayocular_fields().items():  # noqa: SLF001
-            value = getattr(self, field_name)
+        for field in fields(self):
+            value = getattr(self, field.name)
+            descriptor = type(self).__dict__.get(field.name)
 
-            if isinstance(value, BaseModel):
-                rayocular_fields[field_value.rayocular_name] = value.to_rayocular()
-            elif is_dataclass(value):
-                rayocular_fields[field_value.rayocular_name] = asdict(value)
-            else:
-                rayocular_fields[field_value.rayocular_name] = value
+            if isinstance(descriptor, RayOcularField):
+                if not descriptor.importable:
+                    continue
+
+                if isinstance(value, Vector3):
+                    rayocular_fields[descriptor.rayocular_name] = [value.x, value.y, value.z]
+                elif is_dataclass(value):
+                    rayocular_fields[descriptor.rayocular_name] = asdict(value)
+                else:
+                    rayocular_fields[descriptor.rayocular_name] = [value]
+
+            elif isinstance(value, BaseModel):
+                # RayOcular fields cannot be BaseModels
+                value_dict = value.to_rayocular()
+                if set(rayocular_fields.keys()) & set(value_dict.keys()):
+                    raise ValueError(
+                        f"Field {field.name} in {type(self).__name__} has RayOcular fields that overlap with other fields. "
+                        "Nested BaseModel instances must have unique RayOcular field names to avoid conflicts."
+                    )
+                rayocular_fields.update(value_dict)
 
         return rayocular_fields
 
@@ -218,12 +246,14 @@ class AnteriorChamber(BaseModel):
         Local translation of the anterior chamber.
     """
 
-    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(validators.vector3(float), "ChamberLocalRotation")
+    local_rotation: RayOcularField[Vector3[float]] = RayOcularField(
+        validators.vector3(float), "ChamberLocalRotation", importable=False
+    )
     local_scale: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(validators.positive_float), "ChamberLocalScale"
+        validators.vector3(validators.positive_float), "ChamberLocalScale", importable=False
     )
     local_translation: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(float), "ChamberLocalTranslation"
+        validators.vector3(float), "ChamberLocalTranslation", importable=False
     )
 
 
@@ -315,17 +345,17 @@ class Iris(BaseModel):
 
     Attributes
     ----------
-    inner_semi_axis : RayOcularField[Vector3[float]]
+    inner_semi_axis : Vector3[float]
         Inner semi-axes of the iris.
-    outer_semi_axis : RayOcularField[Vector3[float]]
+    outer_semi_axis : Vector3[float]
         Outer semi-axes of the iris.
-    local_rotation : RayOcularField[Vector3[float]]
+    local_rotation : Vector3[float]
         Local rotation of the iris.
-    local_scale : RayOcularField[Vector3[float]]
+    local_scale : Vector3[float]
         Local scale of the iris.
-    local_translation : RayOcularField[Vector3[float]]
+    local_translation : Vector3[float]
         Local translation of the iris.
-    thickness : RayOcularField[float]
+    thickness : float
         Thickness of the iris.
     """
 
@@ -347,15 +377,15 @@ class Lens(BaseModel):
 
     Attributes
     ----------
-    curvature : RayOcularField[float]
+    curvature : float
         Curvature of the lens.
-    local_rotation : RayOcularField[Vector3[float]]
+    local_rotation : Vector3[float]
         Local rotation of the lens.
-    local_scale : RayOcularField[Vector3[float]]
+    local_scale : Vector3[float]
         Local scale of the lens.
-    local_translation : RayOcularField[Vector3[float]]
+    local_translation : Vector3[float]
         Local translation of the lens.
-    semi_axis : RayOcularField[Vector3[float]]
+    semi_axis : Vector3[float]
         Semi-axes of the lens.
     """
 
@@ -376,17 +406,17 @@ class Macula(BaseModel):
 
     Attributes
     ----------
-    height : RayOcularField[float]
+    height : float
         Height of the macula.
-    local_rotation : RayOcularField[Vector3[float]]
+    local_rotation : Vector3[float]
         Local rotation of the macula.
-    local_scale : RayOcularField[Vector3[float]]
+    local_scale : Vector3[float]
         Local scale of the macula.
-    local_translation : RayOcularField[Vector3[float]]
+    local_translation : Vector3[float]
         Local translation of the macula.
-    rotation : RayOcularField[Vector3[float]]
+    rotation : Vector3[float]
         Rotation of the macula.
-    semi_axis : RayOcularField[Vector3[float]]
+    semi_axis : Vector3[float]
         Semi-axes of the macula.
     """
 
@@ -408,15 +438,15 @@ class OpticalDisc(BaseModel):
 
     Attributes
     ----------
-    height : RayOcularField[float]
+    height : float
         Height of the optical disc.
-    local_rotation : RayOcularField[Vector3[float]]
+    local_rotation : Vector3[float]
         Local rotation of the optical disc.
-    local_scale : RayOcularField[Vector3[float]]
+    local_scale : Vector3[float]
         Local scale of the optical disc.
-    local_translation : RayOcularField[Vector3[float]]
+    local_translation : Vector3[float]
         Local translation of the optical disc.
-    semi_axis : RayOcularField[Vector3[float]]
+    semi_axis : Vector3[float]
         Semi-axes of the optical disc.
     """
 
@@ -439,17 +469,17 @@ class OpticalNerve(BaseModel):
 
     Attributes
     ----------
-    height : RayOcularField[float]
+    height : float
         Height of the optical nerve.
-    local_rotation : RayOcularField[Vector3[float]]
+    local_rotation : Vector3[float]
         Local rotation of the optical nerve.
-    local_scale : RayOcularField[Vector3[float]]
+    local_scale : Vector3[float]
         Local scale of the optical nerve.
-    local_translation : RayOcularField[Vector3[float]]
+    local_translation : Vector3[float]
         Local translation of the optical nerve.
-    rotation : RayOcularField[Vector3[float]]
+    rotation : Vector3[float]
         Rotation of the optical nerve.
-    semi_axis : RayOcularField[Vector3[float]]
+    semi_axis : Vector3[float]
         Semi-axes of the optical nerve.
     """
 
@@ -473,13 +503,13 @@ class Retina(BaseModel):
 
     Attributes
     ----------
-    thickness : RayOcularField[float]
+    thickness : float
         Thickness of the retina.
-    local_rotation : RayOcularField[Vector3[float]]
+    local_rotation : Vector3[float]
         Local rotation of the retina.
-    local_scale : RayOcularField[Vector3[float]]
+    local_scale : Vector3[float]
         Local scale of the retina.
-    local_translation : RayOcularField[Vector3[float]]
+    local_translation : Vector3[float]
         Local translation of the retina.
     """
 
@@ -499,15 +529,15 @@ class Sclera(BaseModel):
 
     Attributes
     ----------
-    thickness : RayOcularField[float]
+    thickness : float
         Thickness of the sclera.
-    local_rotation : RayOcularField[Vector3[float]]
+    local_rotation : Vector3[float]
         Local rotation of the sclera.
-    local_scale : RayOcularField[Vector3[float]]
+    local_scale : Vector3[float]
         Local scale of the sclera.
-    local_translation : RayOcularField[Vector3[float]]
+    local_translation : Vector3[float]
         Local translation of the sclera.
-    semi_axis : RayOcularField[Vector3[float]]
+    semi_axis : Vector3[float]
         Semi-axes of the sclera.
     """
 
@@ -528,22 +558,22 @@ class VitreousBody(BaseModel):
 
     Attributes
     ----------
-    local_rotation : RayOcularField[Vector3[float]]
+    local_rotation : Vector3[float]
         Local rotation of the vitreous body.
-    local_scale : RayOcularField[Vector3[float]]
+    local_scale : Vector3[float]
         Local scale of the vitreous body.
-    local_translation : RayOcularField[Vector3[float]]
+    local_translation : Vector3[float]
         Local translation of the vitreous body.
     """
 
     local_rotation: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(float), "VitreousBodyLocalRotation"
+        validators.vector3(float), "VitreousBodyLocalRotation", importable=False
     )
     local_scale: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(validators.positive_float), "VitreousBodyLocalScale"
+        validators.vector3(validators.positive_float), "VitreousBodyLocalScale", importable=False
     )
     local_translation: RayOcularField[Vector3[float]] = RayOcularField(
-        validators.vector3(float), "VitreousBodyLocalTranslation"
+        validators.vector3(float), "VitreousBodyLocalTranslation", importable=False
     )
 
 
@@ -553,33 +583,33 @@ class EyeModelParameters(BaseModel):
 
     Attributes
     ----------
-    eye : ValidatedField[Eye]
+    eye : Eye
         Eye positioning and scale parameters.
-    anterior_chamber : ValidatedField[AnteriorChamber]
+    anterior_chamber : AnteriorChamber
         Anterior chamber parameters.
-    ciliary_body : ValidatedField[CiliaryBody]
+    ciliary_body : CiliaryBody
         Ciliary body parameters.
-    cornea : ValidatedField[Cornea]
+    cornea : Cornea
         Cornea parameters.
-    iris : ValidatedField[Iris]
+    iris : Iris
         Iris parameters.
-    lens : ValidatedField[Lens]
+    lens : Lens
         Lens parameters.
-    macula : ValidatedField[Macula]
+    macula : Macula
         Macula parameters.
-    optical_disc : ValidatedField[OpticalDisc]
+    optical_disc : OpticalDisc
         Optical disc parameters.
-    optical_nerve : ValidatedField[OpticalNerve]
+    optical_nerve : OpticalNerve
         Optical nerve parameters.
-    retina : ValidatedField[Retina]
+    retina : Retina
         Retina parameters.
-    sclera : ValidatedField[Sclera]
+    sclera : Sclera
         Sclera parameters.
-    vitreous_body : ValidatedField[VitreousBody]
+    vitreous_body : VitreousBody
         Vitreous body parameters.
-    lens_cornea_distance : ValidatedField[float]
+    lens_cornea_distance : float
         Distance from lens to cornea.
-    level_of_detail : ValidatedField[int]
+    level_of_detail : int
         Level of detail for geometry rendering.
     """
 
@@ -596,8 +626,8 @@ class EyeModelParameters(BaseModel):
     sclera: ValidatedField[Sclera] = ValidatedField(validators.dataclass(Sclera))
     vitreous_body: ValidatedField[VitreousBody] = ValidatedField(validators.dataclass(VitreousBody))
 
-    lens_cornea_distance: ValidatedField[float] = ValidatedField(validators.positive_float)
-    level_of_detail: ValidatedField[int] = ValidatedField(int)
+    lens_cornea_distance: RayOcularField[float] = RayOcularField(validators.positive_float, "LensCorneaDistance")
+    level_of_detail: RayOcularField[int] = RayOcularField(int, "LevelOfDetail")
 
     @classmethod
     def from_rayocular(cls, parameters) -> EyeModelParameters:
@@ -630,31 +660,6 @@ class EyeModelParameters(BaseModel):
             level_of_detail=parameters.LevelOfDetail,
         )
 
-    def to_rayocular(self) -> dict[str, Any]:
-        """Convert eye model parameters to a RayOcular dictionary.
-
-        Returns
-        -------
-        dict[str, Any]
-            A dictionary that can be used to update the model in RayOcular.
-        """
-        return {
-            **self.eye.to_rayocular(),
-            **self.anterior_chamber.to_rayocular(),
-            **self.ciliary_body.to_rayocular(),
-            **self.cornea.to_rayocular(),
-            **self.iris.to_rayocular(),
-            **self.lens.to_rayocular(),
-            **self.macula.to_rayocular(),
-            **self.optical_disc.to_rayocular(),
-            **self.optical_nerve.to_rayocular(),
-            **self.retina.to_rayocular(),
-            **self.sclera.to_rayocular(),
-            **self.vitreous_body.to_rayocular(),
-            "LensCorneaDistance": self.lens_cornea_distance,
-            "LevelOfDetail": self.level_of_detail,
-        }
-
 
 EyeLaterality = Literal["Left", "Right"]
 
@@ -669,13 +674,13 @@ class EyeModel(BaseModel):
         Eye model measurements.
     parameters : ValidatedField[EyeModelParameters]
         Eye model parameters.
-    laterality : RayOcularField[EyeLaterality]
+    laterality : EyeLaterality
         Eye laterality (Left or Right).
-    description : RayOcularField[str]
+    description : str
         Description of the eye model.
-    inter_pupillary_distance : RayOcularField[Optional[float]]
+    inter_pupillary_distance : Optional[float]
         Inter-pupillary distance.
-    name : RayOcularField[str]
+    name : str
         Name of the eye model.
     """
 
