@@ -9,7 +9,7 @@ from pyrot.config import Config
 from pyrot.eye_modelling.datamodels import model_import
 
 # to set logging level in only this script (note that sys needs to be imported for this as well):
-# logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler(sys.stdout)], force=True)
+# logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 logger.debug("commencing import")
