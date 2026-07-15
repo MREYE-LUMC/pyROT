@@ -7,7 +7,7 @@
 
 ```{image} _static/images/logo-fullsize.png
 :align: right
-:class: logo
+:class: logo dark-light
 :alt: pyROT's logo: a blue snake wearing an eye patch and a pirate hat with a styled RayStation logo.
 ```
 
@@ -45,6 +45,7 @@ to be added
 ```{toctree}
 :maxdepth: 3
 
+User Guide <user_guide/index>
 Contributing <contributing>
 API <api/index>
 ```

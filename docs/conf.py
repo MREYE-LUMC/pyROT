@@ -66,6 +66,7 @@ html_theme_options = {
 }
 
 html_logo = "_static/images/logo.png"
+html_show_sourcelink = False
 
 if os.getenv("READTHEDOCS") == "True":
     git_branch = os.getenv("READTHEDOCS_GIT_IDENTIFIER", "main")
