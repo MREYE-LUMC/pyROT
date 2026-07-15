@@ -15,7 +15,7 @@ jobs:
         with:
           enable-cache: true
       - name: Format and lint
-        run: uvx hatch fmt --check
+        run: uvx hatch check
 
   test:
     runs-on: ubuntu-latest

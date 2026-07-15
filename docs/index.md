@@ -7,7 +7,7 @@
 
 ```{image} _static/images/logo-fullsize.png
 :align: right
-:class: logo
+:class: logo dark-light
 :alt: pyROT's logo: a blue snake wearing an eye patch and a pirate hat with a styled RayStation logo.
 ```
 
@@ -28,7 +28,8 @@ no rights can be derived from it, as is also stated in the [MIT license](LICENSE
 ## Contributing
 
 pyROT aims to be a community-driven project and warmly accepts contributions.
-If you want to contribute, please email us (pyrot@mreye.nl), [open a new discussion](https://github.com/MREYE-LUMC/pyROT/discussions) or read the [contribution guidelines](CONTRIBUTING.md) prior to opening a Pull Request.
+If you want to contribute, please email us (pyrot@mreye.nl) or [open a new discussion](https://github.com/MREYE-LUMC/pyROT/discussions) to dicuss your ideas.
+Please read the [contribution guidelines](contributing.md) prior to opening a Pull Request.
 
 ## Installation
 
@@ -39,10 +40,12 @@ to be added
 - Extend the `pyROT` package with more tools, such as to determine the optimal gazing angle for a given eye model.
 - Extend the unit tests to cover more of the `pyROT` package.
 
-## API
+## Contents
 
 ```{toctree}
 :maxdepth: 3
 
+User Guide <user_guide/index>
+Contributing <contributing>
 API <api/index>
 ```
