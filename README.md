@@ -1,5 +1,6 @@
 # pyROT: Python RayOcular Tools
 
+[![Made by the MReye research group](https://mreye.nl/media/badge.svg)](https://mreye.nl/open-science/software/pyrot)
 [![PyPI - Version](https://img.shields.io/pypi/v/rayocular-toolbox)](https://pypi.org/project/rayocular-toolbox)
 ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FMREYE-LUMC%2FpyROT%2Fmain%2Fpyproject.toml)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MREYE-LUMC/pyROT/ci.yml)
